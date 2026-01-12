@@ -157,17 +157,20 @@ class ToxicityChecker:
                            category: str, score: float, result: dict):
         """Helper to check a set of patterns and update result."""
         import re
+        matched_any = False
         for term in patterns:
             # For single words (no spaces), use word boundary matching
             if ' ' not in term and len(term) <= 8:
                 if self._match_single_word(term, text_lower):
-                    self._add_match(result, category, term, score)
-                    break
+                    self._add_match(result, category, term, score if not matched_any else 0)
+                    matched_any = True
+                    # Continue to find all matches, don't break
             else:
                 # For multi-word phrases, substring match is fine
                 if self._match_phrase(term, text_lower):
-                    self._add_match(result, category, term, score)
-                    break
+                    self._add_match(result, category, term, score if not matched_any else 0)
+                    matched_any = True
+                    # Continue to find all matches, don't break
     
     def _match_single_word(self, term: str, text: str) -> bool:
         """Check for single word with word boundaries."""

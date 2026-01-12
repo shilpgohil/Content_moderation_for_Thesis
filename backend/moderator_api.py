@@ -124,41 +124,38 @@ def moderate_content(text: str) -> ModerationResponse:
     result = moderator.moderate(text)
     
     issues = []
-    seen_types = set()  # Avoid duplicate issue types
     
-    # Extract detailed information from flags
+    # Extract detailed information from flags - show ALL issues, no deduplication
     for flag in result.get("flags", []):
-        # Parse flag format: "type:matched" or just "type"
-        if ":" in flag:
-            parts = flag.split(":", 1)
-            flag_type = parts[0].strip()
-            flag_detail = parts[1].strip()
-        else:
-            flag_type = flag.strip()
-            flag_detail = flag.strip()
+        # Parse flag format: "type:detail" or "toxic:category:term" or just "type"
+        parts = flag.split(":")
+        flag_type = parts[0].strip() if parts else flag.strip()
         
-        # Skip duplicates of same type
-        if flag_type in seen_types:
-            continue
-        seen_types.add(flag_type)
-        
-        # Determine issue category and get matched text
+        # Determine issue category and matched text based on flag format
         if flag_type == "toxic":
-            issue_type = flag_detail  # e.g., "severe_profanity"
-            # For toxicity, we need to find the actual word in the text
-            matched_text = _find_flagged_toxic_word(text, issue_type)
+            if len(parts) >= 3:
+                # New format: toxic:category:term
+                issue_type = parts[1].strip()
+                matched_text = parts[2].strip()
+            elif len(parts) == 2:
+                # Old format: toxic:category
+                issue_type = parts[1].strip()
+                matched_text = _find_flagged_toxic_word(text, issue_type)
+            else:
+                issue_type = "toxicity"
+                matched_text = _find_flagged_toxic_word(text, issue_type)
         elif flag_type == "scam":
             issue_type = "scam"
-            matched_text = flag_detail if flag_detail else "promotional content"
+            matched_text = parts[1].strip() if len(parts) > 1 else "promotional content"
         elif flag_type == "fuzzy":
             issue_type = "scam (misspelled)"
-            matched_text = flag_detail
+            matched_text = parts[1].strip() if len(parts) > 1 else ""
         elif flag_type == "semantic":
             issue_type = "similar to scam"
-            matched_text = flag_detail
+            matched_text = parts[1].strip() if len(parts) > 1 else ""
         else:
             issue_type = flag_type
-            matched_text = flag_detail
+            matched_text = parts[1].strip() if len(parts) > 1 else flag_type
         
         # Find the actual text in the user's content for context
         found_excerpt = _find_text_in_content(text, matched_text) if matched_text else issue_type

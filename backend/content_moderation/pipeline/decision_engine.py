@@ -138,11 +138,26 @@ class DecisionEngine:
         flags = []
         count = 0
         if result.get("is_toxic"):
-            for category in result.get("categories", []):
-                flags.append(f"toxic:{category}")
-                # Severe profanity, hate speech, personal attacks are all BLOCK-worthy
+            # Get both categories and matched terms
+            categories = result.get("categories", [])
+            matched_terms = result.get("matched", [])
+            
+            # Create a flag for EACH matched term (not just category)
+            for i, term in enumerate(matched_terms):
+                # Try to pair with a category if available
+                category = categories[i] if i < len(categories) else categories[0] if categories else "toxicity"
+                flags.append(f"toxic:{category}:{term}")
+                
+                # Count high severity
                 if category in ["hate_speech", "personal_attack", "severe_profanity", "threat", "harassment", "doxxing", "defamation"]:
                     count += 1
+            
+            # If no matched terms but has categories, add category-only flags
+            if not matched_terms and categories:
+                for category in categories:
+                    flags.append(f"toxic:{category}")
+                    if category in ["hate_speech", "personal_attack", "severe_profanity", "threat", "harassment", "doxxing", "defamation"]:
+                        count += 1
         return flags, count
 
     def _determine_verdict(self, result: dict, score: float, severity_count: int):
