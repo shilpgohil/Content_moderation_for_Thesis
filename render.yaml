@@ -3,7 +3,7 @@
 
 services:
   - type: web
-    name: content-moderation-thesis
+    name: content-moderation-for-thesis
     runtime: docker
     dockerfilePath: ./backend/Dockerfile
     dockerContext: ./backend
