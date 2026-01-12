@@ -5,6 +5,7 @@ import Hero from './components/Hero';
 import UploadSection from './components/UploadSection';
 import Dashboard from './components/Dashboard';
 import LoadingState from './components/LoadingState';
+import ModerationLoadingState from './components/ModerationLoadingState';
 import ModerationBlockedView from './components/ModerationBlockedView';
 
 function App() {
@@ -105,7 +106,7 @@ function App() {
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.3 }}
                     >
-                        <LoadingState message="Checking content safety..." />
+                        <ModerationLoadingState />
                     </motion.div>
                 )}
 
