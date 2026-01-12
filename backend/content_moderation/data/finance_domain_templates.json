@@ -1,0 +1,268 @@
+{
+    "description": "Positive examples of finance-related content for semantic domain classification",
+    "templates": {
+        "market_analysis": [
+            "The market correction has created buying opportunities in undervalued sectors",
+            "Volatility indices are signaling increased uncertainty ahead of earnings",
+            "Bull market momentum continues despite macroeconomic headwinds",
+            "Bear market conditions typically favor defensive positioning",
+            "Small-cap extremes are noise more often than signal in portfolio context",
+            "Thin liquidity spikes create temporary dislocations in price discovery",
+            "Market breadth is narrowing as leadership concentrates in mega-caps",
+            "Risk-off sentiment is driving rotation into treasuries and gold",
+            "The VIX term structure suggests elevated near-term uncertainty",
+            "Sector rotation patterns indicate late-cycle positioning"
+        ],
+        "investment_strategy": [
+            "Portfolio diversification reduces unsystematic risk exposure",
+            "Dollar cost averaging smooths entry points over market cycles",
+            "Asset allocation drives the majority of long-term returns",
+            "Rebalancing maintains target risk levels as markets move",
+            "Tax-loss harvesting can offset capital gains liability",
+            "Factor tilts toward value and momentum have historical premiums",
+            "Core-satellite approach balances passive and active exposure",
+            "Risk parity weights positions by volatility contribution",
+            "Multi-asset strategies provide natural hedging properties",
+            "Long-term compounding benefits from early and consistent investment"
+        ],
+        "trading_mechanics": [
+            "Order flow imbalance creates short-term price pressure",
+            "Market makers provide liquidity and earn the bid-ask spread",
+            "Limit orders reduce slippage but may not execute in fast markets",
+            "Stop losses can trigger cascade selling in thin markets",
+            "Options expiration creates gamma exposure and pinning effects",
+            "Short interest above 20% indicates potential squeeze dynamics",
+            "Dark pool activity obscures true supply and demand signals",
+            "High frequency trading dominates short duration price discovery",
+            "Execution algorithms minimize market impact for large orders",
+            "Settlement cycles and margin requirements affect position sizing"
+        ],
+        "macro_economics": [
+            "Federal Reserve policy drives the risk-free rate and discount rates",
+            "Inflation expectations affect real yields and asset valuations",
+            "GDP growth projections influence corporate earnings estimates",
+            "Employment data signals consumer spending capacity",
+            "CPI releases move treasury yields and equity multiples",
+            "Quantitative easing expands the money supply and asset prices",
+            "Fiscal stimulus impacts aggregate demand and deficit levels",
+            "Trade policy affects multinational revenue and supply chains",
+            "Currency movements impact export competitiveness and FX hedging",
+            "Yield curve inversions historically precede recessions"
+        ],
+        "corporate_finance": [
+            "Earnings per share beat expectations driving after-hours movement",
+            "Revenue guidance was revised downward for the next quarter",
+            "Free cash flow generation supports dividend sustainability",
+            "Debt-to-equity ratio indicates leverage and financial risk",
+            "Share buybacks reduce float and boost per-share metrics",
+            "Margin expansion reflects operational efficiency gains",
+            "Capital expenditure plans signal growth investment priorities",
+            "Quarterly results showed strength in the services segment",
+            "Management commentary highlighted competitive pressures",
+            "Cost cutting initiatives are expected to improve profitability"
+        ],
+        "retail_finance": [
+            "Contributing to your 401k up to the employer match is essential",
+            "Roth IRA contributions grow tax-free for retirement",
+            "Emergency fund should cover three to six months of expenses",
+            "High yield savings accounts offer better rates than traditional",
+            "Refinancing the mortgage could save thousands over the loan term",
+            "Credit card interest rates make carrying balances expensive",
+            "Student loan repayment strategies depend on interest rates",
+            "Index funds provide low-cost exposure to broad market returns",
+            "Estate planning ensures assets transfer according to wishes",
+            "Insurance coverage should match liability and income needs"
+        ],
+        "regulatory_context": [
+            "SEC filing requirements mandate quarterly financial disclosure",
+            "FINRA regulations govern broker-dealer conduct and licensing",
+            "Insider trading violations carry significant criminal penalties",
+            "Sarbanes-Oxley compliance affects corporate governance standards",
+            "Regulation Best Interest requires broker recommendations align with client goals",
+            "Accredited investor rules limit access to private placements",
+            "Pattern day trader rules require minimum account balances",
+            "FDIC insurance covers deposits up to the statutory limit",
+            "Fiduciary duty requires advisors to act in client best interest",
+            "Anti-money laundering procedures affect account opening"
+        ],
+        "technical_analysis": [
+            "Support and resistance levels define the trading range",
+            "Moving average crossovers signal trend direction changes",
+            "RSI divergence suggests weakening momentum ahead of reversal",
+            "Volume confirmation validates breakout and breakdown moves",
+            "Candlestick patterns provide entry and exit timing signals",
+            "Fibonacci retracements identify potential reversal zones",
+            "Bollinger band squeeze precedes volatility expansion",
+            "MACD histogram tracks momentum acceleration and deceleration",
+            "Trendline breaks trigger pattern recognition alerts",
+            "Chart patterns like head and shoulders signal trend exhaustion"
+        ]
+    },
+    "negative_examples": {
+        "off_topic_general": [
+            "The football game last Sunday was incredibly exciting",
+            "I am planning a vacation to Hawaii next month",
+            "The new iPhone camera takes amazing photos",
+            "My wedding reception will be at the beach resort",
+            "The video game boss fight was really challenging",
+            "I need to find a good recipe for chocolate cake",
+            "The gym workout routine is getting easier",
+            "Dating apps have changed how people meet",
+            "The movie premiere was a huge success"
+        ],
+        "gossip_about_people": [
+            "Elon is a bad boy",
+            "Jeff Bezos is crazy",
+            "Warren Buffett is so old",
+            "Cathie Wood is stupid",
+            "Jim Cramer is an idiot",
+            "That CEO is a fraud",
+            "This guy is a scammer",
+            "She is the worst investor ever",
+            "He doesn't know what he's doing",
+            "These hedge fund managers are crooks"
+        ],
+        "casual_market_mentions": [
+            "Market is boring today",
+            "Stocks are weird",
+            "I hate this stock",
+            "Markets suck",
+            "Trading is hard",
+            "This stock is trash",
+            "I love my portfolio",
+            "Stonks only go up",
+            "Why is everything red",
+            "Green day finally"
+        ],
+        "low_substance_opinions": [
+            "I think Apple is good",
+            "Tesla is overpriced",
+            "Bitcoin is the future",
+            "Gold is useless",
+            "Crypto is a scam",
+            "Index funds are boring",
+            "Options are gambling",
+            "Buy the dip",
+            "Sell everything now",
+            "This is financial advice"
+        ],
+        "trolling_memes": [
+            "To the moon",
+            "Diamond hands forever",
+            "Paper hands sold",
+            "Apes together strong",
+            "This is the way",
+            "HODL",
+            "YOLO into calls",
+            "Tendies incoming",
+            "Printer go brrr",
+            "Sir this is a Wendy's"
+        ],
+        "emotional_reactions": [
+            "I'm so angry about my losses",
+            "Best day ever made so much money",
+            "Worst investment of my life",
+            "I can't believe this happened",
+            "Should have sold earlier",
+            "Why didn't I buy more",
+            "Feeling great about my picks",
+            "So frustrated with the market",
+            "Excited for tomorrow",
+            "Scared of the crash"
+        ]
+    },
+    "substance_indicators": {
+        "high_substance_patterns": [
+            "based on analysis",
+            "the data shows",
+            "historically",
+            "compared to",
+            "indicates that",
+            "suggests that",
+            "according to",
+            "driven by",
+            "due to",
+            "as a result of",
+            "this means",
+            "therefore",
+            "consequently",
+            "in conclusion",
+            "the evidence",
+            "research shows",
+            "fundamentally",
+            "technically",
+            "valuation implies",
+            "metrics suggest"
+        ],
+        "low_substance_patterns": [
+            "is bad",
+            "is good",
+            "is crazy",
+            "is stupid",
+            "is trash",
+            "sucks",
+            "is boring",
+            "is weird",
+            "love it",
+            "hate it",
+            "so excited",
+            "so frustrated",
+            "feeling",
+            "lol",
+            "lmao",
+            "haha",
+            "omg",
+            "wtf",
+            "bruh",
+            "bro"
+        ]
+    },
+    "discourse_types": {
+        "analysis": [
+            "based on my analysis",
+            "the chart shows",
+            "looking at the fundamentals",
+            "considering the valuation",
+            "from a technical perspective",
+            "the data indicates",
+            "reviewing the financials"
+        ],
+        "education": [
+            "here is how",
+            "let me explain",
+            "for beginners",
+            "the concept of",
+            "understanding",
+            "learning about",
+            "a guide to"
+        ],
+        "question": [
+            "should I",
+            "is it worth",
+            "what do you think",
+            "how does",
+            "can someone explain",
+            "any advice on",
+            "thoughts on"
+        ],
+        "news": [
+            "breaking",
+            "just announced",
+            "reported that",
+            "according to sources",
+            "officially confirmed",
+            "released earnings",
+            "updated guidance"
+        ],
+        "gossip": [
+            "is a bad",
+            "is crazy",
+            "is stupid",
+            "is an idiot",
+            "is a fraud",
+            "is the worst",
+            "doesn't know",
+            "is a scammer"
+        ]
+    }
+}

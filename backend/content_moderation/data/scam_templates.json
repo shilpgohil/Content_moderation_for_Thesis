@@ -1,0 +1,480 @@
+{
+    "templates": [
+        {
+            "text": "Join my group for guaranteed returns every month",
+            "severity": "high"
+        },
+        {
+            "text": "I guarantee you will make profit with my tips",
+            "severity": "high"
+        },
+        {
+            "text": "Get assured returns on your investment",
+            "severity": "high"
+        },
+        {
+            "text": "100 percent guaranteed profit in stock market",
+            "severity": "high"
+        },
+        {
+            "text": "Double your money in just a few days",
+            "severity": "high"
+        },
+        {
+            "text": "Multiply your capital quickly with us",
+            "severity": "high"
+        },
+        {
+            "text": "Turn your investment into twice the amount",
+            "severity": "high"
+        },
+        {
+            "text": "Your money will grow 2x in short time",
+            "severity": "high"
+        },
+        {
+            "text": "I have insider information about a stock",
+            "severity": "high"
+        },
+        {
+            "text": "Secret tip that will make you rich",
+            "severity": "high"
+        },
+        {
+            "text": "Confidential information from company insiders",
+            "severity": "high"
+        },
+        {
+            "text": "This stock will jump because of leaked news",
+            "severity": "high"
+        },
+        {
+            "text": "This is a completely risk-free investment",
+            "severity": "high"
+        },
+        {
+            "text": "Zero risk way to make money in stocks",
+            "severity": "high"
+        },
+        {
+            "text": "There is no chance of losing money here",
+            "severity": "high"
+        },
+        {
+            "text": "Safe investment with guaranteed profits",
+            "severity": "high"
+        },
+        {
+            "text": "Send money to my account to join",
+            "severity": "high"
+        },
+        {
+            "text": "Pay the registration fee to my UPI",
+            "severity": "high"
+        },
+        {
+            "text": "Transfer funds to start making money",
+            "severity": "high"
+        },
+        {
+            "text": "Deposit amount in our trading pool",
+            "severity": "high"
+        },
+        {
+            "text": "Last chance to join our exclusive group",
+            "severity": "medium"
+        },
+        {
+            "text": "Limited spots available act now",
+            "severity": "medium"
+        },
+        {
+            "text": "This opportunity will not come again",
+            "severity": "medium"
+        },
+        {
+            "text": "Hurry up before its too late",
+            "severity": "medium"
+        },
+        {
+            "text": "We will trade on your behalf and give profits",
+            "severity": "high"
+        },
+        {
+            "text": "Just give us your capital we do the rest",
+            "severity": "high"
+        },
+        {
+            "text": "Let us handle your money for guaranteed returns",
+            "severity": "high"
+        },
+        {
+            "text": "Make thousands of rupees every day from home",
+            "severity": "high"
+        },
+        {
+            "text": "Earn daily income through our trading system",
+            "severity": "medium"
+        },
+        {
+            "text": "Get fixed daily returns on investment",
+            "severity": "high"
+        },
+        {
+            "text": "Join our VIP telegram for premium stock tips",
+            "severity": "medium"
+        },
+        {
+            "text": "Our premium members make lakhs every month",
+            "severity": "medium"
+        },
+        {
+            "text": "Exclusive signals for VIP members only",
+            "severity": "medium"
+        },
+        {
+            "text": "I will teach you how to never lose money",
+            "severity": "high"
+        },
+        {
+            "text": "My trading system has 100 percent accuracy",
+            "severity": "high"
+        },
+        {
+            "text": "Guaranteed minimum returns every week",
+            "severity": "high"
+        },
+        {
+            "text": "No experience needed to make money",
+            "severity": "medium"
+        },
+        {
+            "text": "Work from home and earn lakhs monthly",
+            "severity": "medium"
+        },
+        {
+            "text": "This penny stock will give 1000 percent returns",
+            "severity": "high"
+        },
+        {
+            "text": "Triple your money in one month guaranteed",
+            "severity": "high"
+        },
+        {
+            "text": "Send me money and I will double it",
+            "severity": "high"
+        },
+        {
+            "text": "Pay joining fee to get premium tips",
+            "severity": "high"
+        },
+        {
+            "text": "Transfer to my bank for investment",
+            "severity": "high"
+        },
+        {
+            "text": "My insider connections will make you rich",
+            "severity": "high"
+        },
+        {
+            "text": "You will recover your investment in first week",
+            "severity": "high"
+        },
+        {
+            "text": "SEBI registered advisor with guaranteed tips",
+            "severity": "high"
+        },
+        {
+            "text": "Secret stock that will be the next Reliance",
+            "severity": "high"
+        },
+        {
+            "text": "Leaked acquisition news will make this stock fly",
+            "severity": "high"
+        },
+        {
+            "text": "Risk free returns of 25 percent monthly",
+            "severity": "high"
+        },
+        {
+            "text": "Foolproof trading strategy that never fails",
+            "severity": "high"
+        },
+        {
+            "text": "Grow your wealth exponentially in short time",
+            "severity": "high"
+        },
+        {
+            "text": "Multiply your capital several times over",
+            "severity": "high"
+        },
+        {
+            "text": "Zero possibility of losing your investment",
+            "severity": "high"
+        },
+        {
+            "text": "Let me handle your investments while you relax",
+            "severity": "high"
+        },
+        {
+            "text": "I will execute trades using your capital",
+            "severity": "high"
+        },
+        {
+            "text": "Grant me access to manage your portfolio",
+            "severity": "high"
+        },
+        {
+            "text": "Hidden technique that the wealthy use",
+            "severity": "high"
+        },
+        {
+            "text": "Secret methodology for serious individuals",
+            "severity": "high"
+        },
+        {
+            "text": "Eliminate any chance of losing money",
+            "severity": "high"
+        },
+        {
+            "text": "Shield your principal from any downside",
+            "severity": "high"
+        },
+        {
+            "text": "Privileged information that institutions hide",
+            "severity": "high"
+        },
+        {
+            "text": "Advance notice of market moves before they happen",
+            "severity": "high"
+        },
+        {
+            "text": "Account balance grow automatically every day",
+            "severity": "high"
+        },
+        {
+            "text": "Consistent income day after day without fail",
+            "severity": "high"
+        },
+        {
+            "text": "Help investors recover lost funds",
+            "severity": "high"
+        },
+        {
+            "text": "Reclaim funds you believed were gone",
+            "severity": "high"
+        },
+        {
+            "text": "My connections can retrieve your capital",
+            "severity": "high"
+        },
+        {
+            "text": "Passive income without your time or attention",
+            "severity": "high"
+        },
+        {
+            "text": "Algorithmic system deposits profits automatically",
+            "severity": "high"
+        },
+        {
+            "text": "Initial funding gets you lifetime access",
+            "severity": "medium"
+        },
+        {
+            "text": "Unprecedented wealth transfer opportunity",
+            "severity": "high"
+        },
+        {
+            "text": "Capture extraordinary returns while others miss out",
+            "severity": "high"
+        },
+        {
+            "text": "Your capital combined with my expertise",
+            "severity": "high"
+        },
+        {
+            "text": "You contribute funds I handle execution",
+            "severity": "high"
+        },
+        {
+            "text": "Split the substantial profits together",
+            "severity": "high"
+        },
+        {
+            "text": "Entry to my private community is restricted",
+            "severity": "medium"
+        },
+        {
+            "text": "Initial commitment to demonstrate seriousness",
+            "severity": "medium"
+        },
+        {
+            "text": "No experience or knowledge needed to succeed",
+            "severity": "high"
+        },
+        {
+            "text": "Even beginners generating significant income",
+            "severity": "high"
+        },
+        {
+            "text": "Modest amount transforms into substantial wealth",
+            "severity": "high"
+        },
+        {
+            "text": "Multiplied their investment many times over",
+            "severity": "high"
+        },
+        {
+            "text": "Transformed their financial lives through my guidance",
+            "severity": "medium"
+        },
+        {
+            "text": "Consistent profits and life changing results",
+            "severity": "high"
+        },
+        {
+            "text": "Lock in profits before market affects them",
+            "severity": "high"
+        },
+        {
+            "text": "Profits protected and continuously growing",
+            "severity": "high"
+        },
+        {
+            "text": "What banks hide from ordinary investors",
+            "severity": "high"
+        },
+        {
+            "text": "Institutional level strategies for retail investors",
+            "severity": "medium"
+        },
+        {
+            "text": "Financial mentor with direct access to profits",
+            "severity": "high"
+        },
+        {
+            "text": "Mentorship investment minimal compared to wealth",
+            "severity": "high"
+        },
+        {
+            "text": "Connect your capital to my algorithms",
+            "severity": "high"
+        },
+        {
+            "text": "Build generational wealth through my program",
+            "severity": "high"
+        },
+        {
+            "text": "Achieve what takes families decades in years",
+            "severity": "high"
+        },
+        {
+            "text": "Escape corporate grind achieve financial independence",
+            "severity": "medium"
+        },
+        {
+            "text": "Investment returns will exceed your salary",
+            "severity": "high"
+        },
+        {
+            "text": "Quit their jobs to trade full time using my methods",
+            "severity": "high"
+        },
+        {
+            "text": "Verified audited performance records",
+            "severity": "medium"
+        },
+        {
+            "text": "Track record of success documented and irrefutable",
+            "severity": "medium"
+        },
+        {
+            "text": "Profit from chaos while protecting your capital",
+            "severity": "high"
+        },
+        {
+            "text": "My system thrives on volatility",
+            "severity": "high"
+        },
+        {
+            "text": "Membership activates profit distributions",
+            "severity": "high"
+        },
+        {
+            "text": "Strict closing date spots allocated first come",
+            "severity": "medium"
+        },
+        {
+            "text": "Most significant financial decision of your life",
+            "severity": "medium"
+        },
+        {
+            "text": "Minimal effort delivering maximum returns",
+            "severity": "high"
+        },
+        {
+            "text": "Profits accumulate automatically",
+            "severity": "high"
+        },
+        {
+            "text": "Safe harbor for your capital",
+            "severity": "medium"
+        },
+        {
+            "text": "Security with attractive returns that outperform",
+            "severity": "high"
+        },
+        {
+            "text": "Mirror my actions watch your account grow",
+            "severity": "high"
+        },
+        {
+            "text": "Success is now a formula you can copy",
+            "severity": "high"
+        },
+        {
+            "text": "Breaking silence on closely guarded approach",
+            "severity": "high"
+        },
+        {
+            "text": "Join the ranks of the financially elite",
+            "severity": "high"
+        },
+        {
+            "text": "Wealth flows into your account effortlessly",
+            "severity": "high"
+        },
+        {
+            "text": "Copy my trades and earn while sleeping",
+            "severity": "high"
+        },
+        {
+            "text": "Social trading platform connect your account",
+            "severity": "high"
+        },
+        {
+            "text": "Learn forex trading from number one trader",
+            "severity": "medium"
+        },
+        {
+            "text": "I turned small amount into crores",
+            "severity": "medium"
+        },
+        {
+            "text": "Virtual trading competition with prize pool",
+            "severity": "medium"
+        },
+        {
+            "text": "I manage private hedge fund for investors",
+            "severity": "high"
+        },
+        {
+            "text": "Minimum investment with guaranteed annual returns",
+            "severity": "high"
+        },
+        {
+            "text": "Your money is completely safe with me",
+            "severity": "high"
+        }
+    ]
+}
