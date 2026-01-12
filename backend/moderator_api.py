@@ -88,26 +88,26 @@ def _get_detailed_suggestion(issue_type: str, matched_text: str) -> str:
 
 
 def _find_text_in_content(text: str, term: str) -> str:
-    """Find the exact occurrence of a term in the original text with context."""
+    """
+    Find the exact occurrence of a term in the original text.
+    Returns the matched word/phrase as found in the text (preserving case).
+    """
     import re
     text_lower = text.lower()
     term_lower = term.lower()
     
-    # Find position in original text
-    pos = text_lower.find(term_lower)
-    if pos != -1:
-        # Extract with some context (10 chars before and after)
-        start = max(0, pos - 10)
-        end = min(len(text), pos + len(term) + 10)
-        excerpt = text[start:end]
-        
-        # Clean up: find word boundaries
-        if start > 0:
-            excerpt = "..." + excerpt
-        if end < len(text):
-            excerpt = excerpt + "..."
-        
-        return excerpt.strip()
+    # For single words, use word boundary matching to get exact word
+    if ' ' not in term_lower and len(term_lower) <= 20:
+        pattern = r'\b' + re.escape(term_lower) + r'\w*\b'
+        match = re.search(pattern, text_lower)
+        if match:
+            # Return the word as it appears in original text (preserves case)
+            return text[match.start():match.end()]
+    else:
+        # For phrases, find exact position
+        pos = text_lower.find(term_lower)
+        if pos != -1:
+            return text[pos:pos + len(term)]
     
     return term
 
@@ -185,35 +185,74 @@ def moderate_content(text: str) -> ModerationResponse:
 def _find_flagged_toxic_word(text: str, category: str) -> str:
     """
     Find the actual toxic word in the text based on category.
-    This checks against common patterns to extract the exact flagged term.
+    Loads terms from toxic_terms.json and searches for exact matches.
     """
+    import json
     import re
+    from pathlib import Path
+    
     text_lower = text.lower()
     
-    # Common severe profanity patterns
-    severe_patterns = [
-        r'\bf+u+c+k+\w*',
-        r'\bs+h+i+t+\w*',
-        r'\ba+s+s+\b',
-        r'\bb+i+t+c+h+\w*',
-        r'\bc+u+n+t+\w*',
-        r'\bd+a+m+n+\w*',
-    ]
+    # Load toxic terms from JSON
+    data_path = Path(__file__).parent / "content_moderation" / "data" / "toxic_terms.json"
     
-    if "profan" in category.lower():
-        for pattern in severe_patterns:
+    try:
+        with open(data_path, 'r', encoding='utf-8') as f:
+            toxic_data = json.load(f)
+    except Exception:
+        # Fallback if file not found
+        return category.replace("_", " ")
+    
+    # Map category names to JSON keys
+    category_mapping = {
+        "severe_profanity": "severe_profanity",
+        "mild_profanity": "mild_profanity",
+        "personal_attack": "personal_attacks",
+        "hate_speech": "hate_speech_patterns",
+        "threat": "threat_patterns",
+        "harassment": "harassment_patterns",
+        "mockery": "mockery_patterns",
+        "doxxing": "doxxing_patterns",
+        "defamation": "defamation_patterns",
+        "spam": "spam_indicators",
+    }
+    
+    # Find which JSON key to use
+    json_key = None
+    category_lower = category.lower()
+    for cat_name, key in category_mapping.items():
+        if cat_name in category_lower:
+            json_key = key
+            break
+    
+    # If no specific mapping, try all categories
+    if json_key:
+        terms_to_check = toxic_data.get(json_key, [])
+    else:
+        # Check ALL categories to find the match
+        terms_to_check = []
+        for key, terms in toxic_data.items():
+            if isinstance(terms, list):
+                terms_to_check.extend(terms)
+    
+    # Search for each term in the text
+    for term in terms_to_check:
+        term_lower = term.lower()
+        
+        # For single words, use word boundary matching
+        if ' ' not in term_lower and len(term_lower) <= 15:
+            pattern = r'\b' + re.escape(term_lower) + r'\w*\b'
             match = re.search(pattern, text_lower)
             if match:
+                # Return the actual matched text from original (preserves case)
                 return text[match.start():match.end()]
+        else:
+            # For phrases, use substring match
+            pos = text_lower.find(term_lower)
+            if pos != -1:
+                return text[pos:pos + len(term)]
     
-    if "attack" in category.lower():
-        attack_patterns = [r'\bidiot\w*', r'\bstupid\w*', r'\bmoron\w*', r'\btrash\b', r'\bloser\w*']
-        for pattern in attack_patterns:
-            match = re.search(pattern, text_lower)
-            if match:
-                return text[match.start():match.end()]
-    
-    # Default: return category name if nothing specific found
+    # If nothing found, return cleaned category name
     return category.replace("_", " ")
 
 
