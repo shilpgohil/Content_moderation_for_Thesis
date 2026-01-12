@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 class LinguisticAnalyzer:
     """Provides deep linguistic analysis including NER, negation, and dependencies."""
     
-    def __init__(self, model_name: str = "en_core_web_md"):
+    def __init__(self, model_name: str = "en_core_web_sm"):
         self.model_name = model_name
         self._nlp = None
         self._disabled = False
