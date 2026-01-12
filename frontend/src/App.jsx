@@ -22,10 +22,8 @@ function App() {
         setError(null);
 
         try {
-            // Step 1: Content moderation check
-            console.log('Starting moderation check...');
+            // Step 1: Content moderation
             const modResult = await moderateContent(thesisText);
-            console.log('Moderation result:', modResult);
 
             // Check if content can proceed
             if (!modResult.can_proceed) {
@@ -42,7 +40,6 @@ function App() {
             setView('dashboard');
 
         } catch (err) {
-            console.error('Analysis failed:', err);
 
             let errorMessage = 'Analysis failed. Please try again.';
             if (err.response?.data?.detail) {
@@ -72,10 +69,8 @@ function App() {
     };
 
     const handleEditFromBlocked = () => {
-        // Return to upload view with text preserved
         setModerationResult(null);
         setView('upload');
-        // Note: currentText is preserved, UploadSection will need to accept initialText prop
     };
 
     return (

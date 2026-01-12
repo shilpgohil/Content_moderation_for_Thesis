@@ -69,7 +69,7 @@ def _get_detailed_suggestion(issue_type: str, matched_text: str) -> str:
         "severe_profanity": f"Remove the profane language: \"{matched_text}\". Use professional language instead.",
         "mild_profanity": f"Consider removing \"{matched_text}\" for a more professional tone.",
         "personal_attack": f"Remove the personal attack: \"{matched_text}\". Focus on the investment argument.",
-        "hate_speech": f"Remove hate speech content. This type of language is not acceptable.",
+        "hate_speech": "Remove hate speech content. This type of language is not acceptable.",
         "threat": f"Remove threatening language: \"{matched_text}\". Keep content civil.",
         "harassment": f"Remove harassment: \"{matched_text}\". Maintain respectful discourse.",
         "defamation": f"Remove potentially defamatory statement about: \"{matched_text}\".",
@@ -254,20 +254,11 @@ def _find_flagged_toxic_word(text: str, category: str) -> str:
 
 
 def submit_manual_review(request: ManualReviewRequest) -> ManualReviewResponse:
-    """
-    Submit content for manual review.
-    
-    In a production system, this would:
-    1. Store the request in a database
-    2. Send email notification to admin
-    3. Return a tracking ID
-    
-    For now, we just log and return a mock response.
-    """
+    """Submit content for manual review. Logs the request and returns a tracking ID."""
     import uuid
     review_id = str(uuid.uuid4())[:8]
     
-    # TODO: Implement actual storage/notification
+    # Log review request (production: store in DB + send email)
     print(f"[ManualReview] Submitted review {review_id} from {request.user_email}")
     print(f"[ManualReview] Reason: {request.reason}")
     print(f"[ManualReview] Text length: {len(request.text)} chars")
