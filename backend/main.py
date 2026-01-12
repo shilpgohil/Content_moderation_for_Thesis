@@ -35,19 +35,13 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# CORS configuration - Allow frontend domains
+# CORS - Allow all origins for deployment
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-        "https://thesisguardian.vercel.app",
-        "https://*.vercel.app",
-    ],
-    allow_credentials=True,
-    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_origins=["*"],
+    allow_credentials=False,
+    allow_methods=["*"],
     allow_headers=["*"],
-    expose_headers=["*"],
 )
 
 
