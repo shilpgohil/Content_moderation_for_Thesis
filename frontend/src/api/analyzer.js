@@ -3,7 +3,9 @@ import axios from 'axios';
 // Auto-detect environment based on browser URL
 const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
     ? 'http://localhost:8000/api'
-    : 'https://thesis-content-guard.onrender.com/api';
+    : 'https://content-moderation-for-thesis.onrender.com/api';
+
+console.log('Active API Base:', API_BASE);
 
 /**
  * Step 1: Content Moderation Check
