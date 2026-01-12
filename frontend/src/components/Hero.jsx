@@ -19,7 +19,7 @@ export default function Hero() {
                     {/* Badge */}
                     <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-500/10 border border-primary-500/20 mb-8">
                         <Atom className="w-4 h-4 text-primary-400" />
-                        <span className="text-sm text-primary-300">ML + LLM Hybrid Analysis</span>
+                        <span className="text-sm text-primary-300">AI Powered Thesis Analyzer</span>
                     </div>
 
                     {/* Main title */}
@@ -28,8 +28,7 @@ export default function Hero() {
                     </h1>
 
                     <p className="text-xl text-gray-400 mb-12 max-w-2xl mx-auto">
-                        Validate your investment thesis with AI-powered analysis.
-                        Get detailed scoring across 5 key dimensions with sentence-level breakdowns.
+                        Validate your investment thesis with AI powered analysis
                     </p>
 
                     {/* Feature cards */}
