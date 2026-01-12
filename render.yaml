@@ -12,5 +12,3 @@ services:
     envVars:
       - key: OPENAI_API_KEY
         sync: false  # Set manually in Render dashboard
-      - key: LIGHTWEIGHT_MODE
-        value: "true"
