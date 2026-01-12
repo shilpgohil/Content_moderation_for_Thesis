@@ -6,8 +6,8 @@ Provides gatekeeper functionality before thesis analysis.
 import os
 from typing import List, Optional
 from pydantic import BaseModel
-from .content_moderation import ContentModerator
-from .content_moderation.config import LIGHTWEIGHT_CONFIG, DEFAULT_CONFIG
+from content_moderation import ContentModerator
+from content_moderation.config import LIGHTWEIGHT_CONFIG, DEFAULT_CONFIG
 
 
 # Use lightweight mode for free tier deployment (512MB RAM)
