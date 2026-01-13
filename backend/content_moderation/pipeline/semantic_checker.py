@@ -31,16 +31,10 @@ class SemanticChecker:
         self._load_whitelist()
     
     def _load_model(self):
-        """Lazy load the sentence transformer model."""
+        """Lazy load the sentence transformer model from shared manager."""
         if self._model is None:
-            try:
-                from sentence_transformers import SentenceTransformer
-                self._model = SentenceTransformer('all-MiniLM-L6-v2')
-            except ImportError:
-                raise ImportError(
-                    "sentence-transformers is required for semantic checking. "
-                    "Install with: pip install sentence-transformers"
-                )
+            from shared.model_manager import get_sentence_transformer
+            self._model = get_sentence_transformer()
         return self._model
     
     def _load_templates(self) -> List[Dict]:

@@ -45,7 +45,32 @@ app.add_middleware(
 )
 
 
+# ============ Startup Event - Pre-warm Models ============
+
+@app.on_event("startup")
+async def startup_event():
+    """
+    Pre-load all ML models on startup to eliminate cold start latency.
+    This runs automatically when the server starts.
+    """
+    logger.info("Pre-warming ML models on startup...")
+    try:
+        # Warm up shared models (single instances for all modules)
+        from shared.model_manager import get_spacy, get_sentence_transformer
+        get_spacy()
+        get_sentence_transformer()
+        
+        # Warm up moderator (initializes pipeline components)
+        from moderator_api import get_moderator
+        get_moderator()
+        
+        logger.info("All models pre-warmed successfully - ready for requests")
+    except Exception as e:
+        logger.warning(f"Startup warmup partial failure (non-fatal): {e}")
+
+
 # ============ Health Check ============
+
 
 @app.get("/")
 async def root():
@@ -179,19 +204,21 @@ async def analyze_thesis(file: UploadFile = File(...)):
 @app.post("/api/warmup")
 async def warmup():
     """
-    Preload ML models.
-    Call this on deployment startup to reduce cold start latency.
+    Preload ML models (manual trigger).
+    Note: Models are now auto-preloaded on startup, but this endpoint
+    can still be used to verify models are loaded.
     """
     try:
-        logger.info("Warming up models...")
+        logger.info("Warming up models (manual trigger)...")
         
-        # Warm up moderation
+        # Warm up shared models
+        from shared.model_manager import get_spacy, get_sentence_transformer
+        get_spacy()
+        get_sentence_transformer()
+        
+        # Warm up moderation pipeline
         from moderator_api import get_moderator
         get_moderator()
-        
-        # Warm up spaCy for analysis
-        from shared.model_manager import get_spacy
-        get_spacy()
         
         logger.info("Warmup complete")
         return {"status": "models loaded"}

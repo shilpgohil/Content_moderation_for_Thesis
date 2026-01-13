@@ -44,15 +44,11 @@ class ContentAnalyzer:
         self._is_loaded = False
     
     def _load_model(self):
-        """Lazy load the sentence transformer model."""
+        """Lazy load the sentence transformer model from shared manager."""
         if self._model is None:
-            try:
-                from sentence_transformers import SentenceTransformer
-                logger.info("Loading sentence transformer for content analysis...")
-                self._model = SentenceTransformer('all-MiniLM-L6-v2')
-            except ImportError:
-                logger.warning("sentence-transformers not installed.")
-                return None
+            from shared.model_manager import get_sentence_transformer
+            logger.info("Loading sentence transformer for content analysis...")
+            self._model = get_sentence_transformer()
         return self._model
     
     def _load_templates(self) -> Dict:

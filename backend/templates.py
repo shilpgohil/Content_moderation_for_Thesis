@@ -1,30 +1,17 @@
 """
 Template Embedding Bank for sentence classification.
 Uses gold-standard example sentences for each type to improve ML classification accuracy.
-Reuses the sentence transformer from categorizer for RAM efficiency.
+Uses shared SentenceTransformer from model_manager for RAM efficiency.
 """
 
 import numpy as np
 from typing import Dict, List, Tuple, Optional
 
-# Lazy load sentence transformer (shared with categorizer)
-_sentence_transformer = None
-_template_embeddings = None
+# Import shared sentence transformer singleton
+from shared.model_manager import get_sentence_transformer
 
-def get_sentence_transformer():
-    """Lazy load sentence transformer - reuse from categorizer if available."""
-    global _sentence_transformer
-    if _sentence_transformer is None:
-        from sentence_transformers import SentenceTransformer
-        _sentence_transformer = SentenceTransformer("all-MiniLM-L6-v2")
-        # Check verbose flag from analyzer module
-        try:
-            import analyzer
-            if getattr(analyzer, '_verbose', True):
-                print("Sentence transformer loaded for template matching.")
-        except (ImportError, AttributeError):
-            pass  # Silent in API mode
-    return _sentence_transformer
+# Cache for template embeddings
+_template_embeddings = None
 
 
 # ============================================
