@@ -29,14 +29,13 @@ class LinguisticAnalyzer:
             self._disabled = True
 
     def _load_model(self):
-        """Lazy load the SpaCy model."""
+        """Lazy load the SpaCy model from shared manager."""
         if self._nlp is None and not self._disabled:
             try:
                 logger.info(f"Loading SpaCy model: {self.model_name}")
-                # Disable components we don't strictly need for speed, if necessary.
-                # Here we need: toc2vec (if MD), tagger, parser, ner, attribute_ruler, lemmatizer.
-                # We can disable 'senter' if parser provides sentences.
-                self._nlp = spacy.load(self.model_name)
+                # Use shared model manager for singleton spaCy instance
+                from shared.model_manager import get_spacy
+                self._nlp = get_spacy()
                 logger.info("SpaCy model loaded successfully.")
             except Exception as e:
                 logger.error(f"Failed to load SpaCy model '{self.model_name}': {e}", exc_info=True)
