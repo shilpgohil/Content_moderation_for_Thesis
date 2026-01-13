@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>DOCUMENTATION.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="thesis-content-guard">Thesis Content Guard</h1>
+<p><strong>Version:</strong> 1.0.0
+<strong>Date:</strong> January 13, 2026
+<strong>Status:</strong> Production Ready
+<strong>Live URL:</strong> https://thesisguardian.vercel.app</p>
+<hr>
+<h2 id="1-overview">1. Overview</h2>
+<p>Thesis Content Guard is a two phase system that combines Content Moderation with Thesis Strength Analysis. The system first checks if the content is safe and relevant to finance, then provides a detailed quality assessment.</p>
+<h3 id="two-phase-process">Two Phase Process</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Phase</th>
+<th style="text-align:left">Purpose</th>
+<th style="text-align:left">Outcome</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Phase 1: Content Moderation</td>
+<td style="text-align:left">Filters spam, scams, offensive content, and off topic submissions</td>
+<td style="text-align:left">PASS, FLAG, or BLOCK</td>
+</tr>
+<tr>
+<td style="text-align:left">Phase 2: Thesis Analysis</td>
+<td style="text-align:left">Scores the thesis using machine learning and language models</td>
+<td style="text-align:left">Detailed report with letter grade</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="2-system-architecture">2. System Architecture</h2>
+<h3 id="21-complete-flow">2.1 Complete Flow</h3>
+<pre><code class="language-mermaid"><div class="mermaid">graph TD
+    subgraph "USER INTERACTION"
+        A["User uploads thesis text"] --> B["React Frontend (Vercel)"]
+    end
+
+    subgraph "PHASE 1: CONTENT MODERATION"
+        B -->|"POST /api/moderate"| C["FastAPI Backend (Render)"]
+        C --> D["TextPreprocessor<br/>(Clean text, decode tricks)"]
+        D --> E["LinguisticAnalyzer<br/>(spaCy NLP: entities, negations)"]
+        E --> F["DomainChecker<br/>(Finance relevance check)"]
+    
+        F -->|"Not Finance"| G["BLOCK: Off Topic"]
+        F -->|"Finance Related"| H["Safety Checks (Parallel)"]
+    
+        H --> I["RuleEngine<br/>(Scam patterns)"]
+        H --> J["ToxicityChecker<br/>(Profanity, hate speech)"]
+        H --> K["FuzzyMatcher<br/>(Misspelled scams)"]
+    
+        I --> L["DecisionEngine<br/>(Combine scores)"]
+        J --> L
+        K --> L
+    
+        L -->|"Risk >= 0.5"| M["BLOCK"]
+        L -->|"Risk >= 0.2"| N["FLAG"]
+        L -->|"Risk < 0.2"| O["PASS"]
+    end
+
+    subgraph "PHASE 2: THESIS ANALYSIS"
+        O -->|"POST /api/analyze"| P["Thesis Analyzer"]
+    
+        P --> Q["spaCy NLP<br/>(Sentence parsing)"]
+        P --> R["SentenceTransformers<br/>(Vector embeddings)"]
+    
+        Q --> S["ML Scoring Layer<br/>(Evidence, Clarity, Risk)"]
+        R --> S
+    
+        S --> T["LLM Refinement<br/>(OpenAI GPT-4o-mini)"]
+        T --> U["StrengthReport<br/>(5 dimensions + grade)"]
+    end
+
+    subgraph "RESULTS"
+        M --> V["Show Blocked View<br/>(User can edit or request review)"]
+        N --> V
+        U --> W["Show Analysis Dashboard<br/>(Scores, charts, suggestions)"]
+    end
+</div></code></pre>
+<hr>
+<h2 id="3-phase-1-content-moderation">3. Phase 1: Content Moderation</h2>
+<h3 id="31-pipeline-steps">3.1 Pipeline Steps</h3>
+<p>The moderation system processes content through multiple checks:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Step</th>
+<th style="text-align:left">Component</th>
+<th style="text-align:left">What It Does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">1</td>
+<td style="text-align:left">TextPreprocessor</td>
+<td style="text-align:left">Cleans text and decodes tricks like &quot;gu4r4nt33d&quot; to &quot;guaranteed&quot;</td>
+</tr>
+<tr>
+<td style="text-align:left">2</td>
+<td style="text-align:left">LinguisticAnalyzer</td>
+<td style="text-align:left">Identifies names, companies, and understands context like &quot;not a scam&quot;</td>
+</tr>
+<tr>
+<td style="text-align:left">3</td>
+<td style="text-align:left">DomainChecker</td>
+<td style="text-align:left">Confirms the content is about finance and investing</td>
+</tr>
+<tr>
+<td style="text-align:left">4a</td>
+<td style="text-align:left">RuleEngine</td>
+<td style="text-align:left">Detects known scam phrases and patterns</td>
+</tr>
+<tr>
+<td style="text-align:left">4b</td>
+<td style="text-align:left">ToxicityChecker</td>
+<td style="text-align:left">Catches profanity, hate speech, and personal attacks</td>
+</tr>
+<tr>
+<td style="text-align:left">4c</td>
+<td style="text-align:left">FuzzyMatcher</td>
+<td style="text-align:left">Finds misspelled scam words</td>
+</tr>
+<tr>
+<td style="text-align:left">5</td>
+<td style="text-align:left">DecisionEngine</td>
+<td style="text-align:left">Combines all scores and makes the final decision</td>
+</tr>
+</tbody>
+</table>
+<h3 id="32-component-details">3.2 Component Details</h3>
+<p><strong>TextPreprocessor</strong> cleans the input by converting obfuscated text back to normal words and identifying links.</p>
+<p><strong>LinguisticAnalyzer</strong> uses the spaCy language model to understand sentence structure and recognize when negative words change meaning.</p>
+<p><strong>DomainChecker</strong> verifies that content relates to finance. Content below 0.05 relevance score is blocked as off topic.</p>
+<p><strong>RuleEngine</strong> looks for scam patterns but reduces the score when content contains warnings or disclaimers.</p>
+<p><strong>ToxicityChecker</strong> identifies hate speech, personal attacks, profanity, and threats.</p>
+<p><strong>DecisionEngine</strong> produces the final verdict based on combined risk scores.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Risk Score</th>
+<th style="text-align:left">Decision</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">0.5 or higher</td>
+<td style="text-align:left">BLOCK</td>
+</tr>
+<tr>
+<td style="text-align:left">0.2 to 0.5</td>
+<td style="text-align:left">FLAG for review</td>
+</tr>
+<tr>
+<td style="text-align:left">Below 0.2</td>
+<td style="text-align:left">PASS</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="4-phase-2-thesis-analyzer">4. Phase 2: Thesis Analyzer</h2>
+<h3 id="41-scoring-dimensions">4.1 Scoring Dimensions</h3>
+<p>The analyzer evaluates five areas, each worth 20 points:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Dimension</th>
+<th style="text-align:left">What It Measures</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Evidence Quality</td>
+<td style="text-align:left">Balance of facts versus opinions, use of citations</td>
+</tr>
+<tr>
+<td style="text-align:left">Logical Coherence</td>
+<td style="text-align:left">How well arguments support the conclusion</td>
+</tr>
+<tr>
+<td style="text-align:left">Risk Awareness</td>
+<td style="text-align:left">Whether counter arguments are addressed</td>
+</tr>
+<tr>
+<td style="text-align:left">Clarity</td>
+<td style="text-align:left">Readability and appropriate use of financial terms</td>
+</tr>
+<tr>
+<td style="text-align:left">Actionability</td>
+<td style="text-align:left">Practical investment guidance provided</td>
+</tr>
+</tbody>
+</table>
+<h3 id="42-processing-architecture">4.2 Processing Architecture</h3>
+<pre><code class="language-mermaid"><div class="mermaid">graph LR
+    subgraph "LOCAL ML (Free, Fast)"
+        A["Input Text"] --> B["spaCy<br/>(Sentence parsing)"]
+        A --> C["SBERT<br/>(Vector embeddings)"]
+        B --> D["Sentence Classification"]
+        C --> E["Template Matching"]
+        D --> F["ML Scores"]
+        E --> F
+    end
+
+    subgraph "LLM (High Reasoning)"
+        F --> G["Prompt Construction"]
+        G --> H["OpenAI GPT-4o-mini"]
+        H --> I["Refined Scores + Insights"]
+    end
+
+    I --> J["Final Report<br/>(Grade A-F)"]
+</div></code></pre>
+<p>The system uses local machine learning for speed, then refines results with a language model for better insights.</p>
+<h3 id="43-grading-scale">4.3 Grading Scale</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Score</th>
+<th style="text-align:left">Grade</th>
+<th style="text-align:left">Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">80 to 100</td>
+<td style="text-align:left">A</td>
+<td style="text-align:left">Excellent</td>
+</tr>
+<tr>
+<td style="text-align:left">70 to 79</td>
+<td style="text-align:left">B</td>
+<td style="text-align:left">Good</td>
+</tr>
+<tr>
+<td style="text-align:left">60 to 69</td>
+<td style="text-align:left">C</td>
+<td style="text-align:left">Average</td>
+</tr>
+<tr>
+<td style="text-align:left">50 to 59</td>
+<td style="text-align:left">D</td>
+<td style="text-align:left">Below average</td>
+</tr>
+<tr>
+<td style="text-align:left">0 to 49</td>
+<td style="text-align:left">F</td>
+<td style="text-align:left">Needs significant improvement</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="5-api-reference">5. API Reference</h2>
+<h3 id="51-available-endpoints">5.1 Available Endpoints</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Method</th>
+<th style="text-align:left">Endpoint</th>
+<th style="text-align:left">Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">GET</td>
+<td style="text-align:left">/</td>
+<td style="text-align:left">Basic health check</td>
+</tr>
+<tr>
+<td style="text-align:left">GET</td>
+<td style="text-align:left">/api/health</td>
+<td style="text-align:left">Detailed system status</td>
+</tr>
+<tr>
+<td style="text-align:left">POST</td>
+<td style="text-align:left">/api/moderate</td>
+<td style="text-align:left">Check content for issues</td>
+</tr>
+<tr>
+<td style="text-align:left">POST</td>
+<td style="text-align:left">/api/analyze</td>
+<td style="text-align:left">Analyze thesis strength</td>
+</tr>
+<tr>
+<td style="text-align:left">POST</td>
+<td style="text-align:left">/api/manual-review</td>
+<td style="text-align:left">Request human review</td>
+</tr>
+<tr>
+<td style="text-align:left">GET</td>
+<td style="text-align:left">/api/warmup</td>
+<td style="text-align:left">Prepare models for faster response</td>
+</tr>
+</tbody>
+</table>
+<h3 id="52-moderation-api">5.2 Moderation API</h3>
+<p><strong>Request:</strong></p>
+<pre class="hljs"><code><div>{
+  <span class="hljs-attr">"text"</span>: <span class="hljs-string">"Your thesis content here..."</span>
+}
+</div></code></pre>
+<p><strong>Response:</strong></p>
+<pre class="hljs"><code><div>{
+  <span class="hljs-attr">"decision"</span>: <span class="hljs-string">"PASS"</span>,
+  <span class="hljs-attr">"risk_score"</span>: <span class="hljs-number">0.05</span>,
+  <span class="hljs-attr">"is_finance_related"</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">"can_proceed"</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">"issues"</span>: [],
+  <span class="hljs-attr">"explanation"</span>: <span class="hljs-string">"Content passes all checks"</span>
+}
+</div></code></pre>
+<h3 id="53-analysis-api">5.3 Analysis API</h3>
+<p><strong>Request:</strong> Send as form data with file upload</p>
+<p><strong>Response:</strong></p>
+<pre class="hljs"><code><div>{
+  <span class="hljs-attr">"overall_score"</span>: <span class="hljs-number">67.5</span>,
+  <span class="hljs-attr">"overall_grade"</span>: <span class="hljs-string">"C"</span>,
+  <span class="hljs-attr">"component_scores"</span>: {
+    <span class="hljs-attr">"evidence_quality"</span>: {<span class="hljs-attr">"score"</span>: <span class="hljs-number">13</span>, <span class="hljs-attr">"max"</span>: <span class="hljs-number">20</span>},
+    <span class="hljs-attr">"logical_coherence"</span>: {<span class="hljs-attr">"score"</span>: <span class="hljs-number">15</span>, <span class="hljs-attr">"max"</span>: <span class="hljs-number">20</span>},
+    <span class="hljs-attr">"risk_awareness"</span>: {<span class="hljs-attr">"score"</span>: <span class="hljs-number">12</span>, <span class="hljs-attr">"max"</span>: <span class="hljs-number">20</span>},
+    <span class="hljs-attr">"clarity"</span>: {<span class="hljs-attr">"score"</span>: <span class="hljs-number">10</span>, <span class="hljs-attr">"max"</span>: <span class="hljs-number">20</span>},
+    <span class="hljs-attr">"actionability"</span>: {<span class="hljs-attr">"score"</span>: <span class="hljs-number">8</span>, <span class="hljs-attr">"max"</span>: <span class="hljs-number">20</span>}
+  },
+  <span class="hljs-attr">"main_claim"</span>: <span class="hljs-string">"Long NVIDIA at $1500 target"</span>,
+  <span class="hljs-attr">"weaknesses"</span>: [...],
+  <span class="hljs-attr">"strengths"</span>: [...],
+  <span class="hljs-attr">"bias_analysis"</span>: {...}
+}
+</div></code></pre>
+<hr>
+<h2 id="6-deployment">6. Deployment</h2>
+<h3 id="61-infrastructure">6.1 Infrastructure</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Component</th>
+<th style="text-align:left">Platform</th>
+<th style="text-align:left">URL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Frontend</td>
+<td style="text-align:left">Vercel</td>
+<td style="text-align:left">https://thesisguardian.vercel.app</td>
+</tr>
+<tr>
+<td style="text-align:left">Backend</td>
+<td style="text-align:left">Render with Docker</td>
+<td style="text-align:left">https://content-moderation-for-thesis.onrender.com</td>
+</tr>
+</tbody>
+</table>
+<h3 id="62-docker-setup">6.2 Docker Setup</h3>
+<p>The Dockerfile includes several optimizations:</p>
+<ol>
+<li>Uses CPU only version of PyTorch to reduce size by 2GB</li>
+<li>Pre downloads the spaCy language model during build</li>
+<li>Pre downloads the sentence transformer model during build</li>
+<li>Uses lazy loading to reduce startup memory</li>
+</ol>
+<h3 id="63-required-settings">6.3 Required Settings</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Variable</th>
+<th style="text-align:left">Required</th>
+<th style="text-align:left">Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">OPENAI_API_KEY</td>
+<td style="text-align:left">Yes</td>
+<td style="text-align:left">Access to OpenAI language model</td>
+</tr>
+<tr>
+<td style="text-align:left">LIGHTWEIGHT_MODE</td>
+<td style="text-align:left">No</td>
+<td style="text-align:left">Reduces memory usage when enabled</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="7-file-structure">7. File Structure</h2>
+<pre class="hljs"><code><div>thesis_content_guard/
+├── backend/
+│   ├── main.py                    # FastAPI application
+│   ├── moderator_api.py           # Moderation API wrapper
+│   ├── Dockerfile                 # Docker build config
+│   ├── requirements.txt           # Python dependencies
+│   ├── content_moderation/
+│   │   ├── moderator.py           # Main moderator class
+│   │   ├── config.py              # Thresholds and weights
+│   │   ├── pipeline/
+│   │   │   ├── preprocessor.py
+│   │   │   ├── linguistic_analyzer.py
+│   │   │   ├── domain_checker.py
+│   │   │   ├── rule_engine.py
+│   │   │   ├── fuzzy_matcher.py
+│   │   │   ├── toxicity_checker.py
+│   │   │   └── decision_engine.py
+│   │   └── data/
+│   │       ├── finance_vocabulary.json
+│   │       ├── scam_patterns.json
+│   │       └── toxic_terms.json
+│   ├── strength_analyzer/
+│   │   ├── analyzer.py            # Main analyzer class
+│   │   ├── models.py              # Data structures
+│   │   ├── templates.py           # ML templates
+│   │   └── vocabularies.py        # Domain word lists
+│   └── shared/
+│       └── model_manager.py       # Shared spaCy instance
+├── frontend/
+│   ├── src/
+│   │   ├── App.jsx
+│   │   ├── api/analyzer.js
+│   │   └── components/
+│   ├── index.html
+│   └── package.json
+└── render.yaml                    # Render deployment config
+</div></code></pre>
+<hr>
+<h2 id="8-configuration">8. Configuration</h2>
+<h3 id="81-moderation-settings">8.1 Moderation Settings</h3>
+<pre class="hljs"><code><div><span class="hljs-meta">@dataclass</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ModerationConfig</span>:</span>
+    block_threshold: float = <span class="hljs-number">0.5</span>
+    flag_threshold: float = <span class="hljs-number">0.2</span>
+    finance_pass_threshold: float = <span class="hljs-number">0.15</span>
+    finance_flag_threshold: float = <span class="hljs-number">0.05</span>
+    scam_weight: float = <span class="hljs-number">0.7</span>
+    toxicity_weight: float = <span class="hljs-number">0.7</span>
+    fuzzy_threshold: float = <span class="hljs-number">0.80</span>
+    semantic_threshold: float = <span class="hljs-number">0.72</span>
+    enable_fuzzy: bool = <span class="hljs-literal">True</span>
+    enable_semantic: bool = <span class="hljs-literal">True</span>
+</div></code></pre>
+<h3 id="82-lightweight-mode">8.2 Lightweight Mode</h3>
+<p>When LIGHTWEIGHT_MODE is set to true:</p>
+<ul>
+<li>Fuzzy matching is disabled (saves about 10MB of memory)</li>
+<li>Semantic checking is disabled (saves about 150MB of memory)</li>
+<li>Rule based and linguistic analysis remain active</li>
+<li>Detection accuracy stays above 85%</li>
+</ul>
+<hr>
+<h2 id="9-performance">9. Performance</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Metric</th>
+<th style="text-align:left">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Legitimate Finance Pass Rate</td>
+<td style="text-align:left">100%</td>
+</tr>
+<tr>
+<td style="text-align:left">Scam Detection Rate</td>
+<td style="text-align:left">Above 90%</td>
+</tr>
+<tr>
+<td style="text-align:left">Off Topic Detection</td>
+<td style="text-align:left">Above 85%</td>
+</tr>
+<tr>
+<td style="text-align:left">Moderation Response Time</td>
+<td style="text-align:left">Under 500ms</td>
+</tr>
+<tr>
+<td style="text-align:left">Analysis Time</td>
+<td style="text-align:left">15 to 30 seconds</td>
+</tr>
+<tr>
+<td style="text-align:left">Docker Cold Start</td>
+<td style="text-align:left">5 to 10 seconds</td>
+</tr>
+<tr>
+<td style="text-align:left">Python Cold Start</td>
+<td style="text-align:left">30 to 60 seconds</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="10-troubleshooting">10. Troubleshooting</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Issue</th>
+<th style="text-align:left">Cause</th>
+<th style="text-align:left">Solution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">CORS Error</td>
+<td style="text-align:left">Backend not accepting frontend requests</td>
+<td style="text-align:left">Check allow_origins setting in main.py</td>
+</tr>
+<tr>
+<td style="text-align:left">Model Not Found</td>
+<td style="text-align:left">Incorrect model name specified</td>
+<td style="text-align:left">Use en_core_web_sm</td>
+</tr>
+<tr>
+<td style="text-align:left">Out of Memory</td>
+<td style="text-align:left">Excessive RAM usage</td>
+<td style="text-align:left">Enable LIGHTWEIGHT_MODE</td>
+</tr>
+<tr>
+<td style="text-align:left">Slow Startup</td>
+<td style="text-align:left">Models being downloaded at runtime</td>
+<td style="text-align:left">Use Docker with pre built models</td>
+</tr>
+<tr>
+<td style="text-align:left">Network Error</td>
+<td style="text-align:left">Backend server is sleeping</td>
+<td style="text-align:left">Wait 30 seconds for the free tier to wake up</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><strong>End of Documentation</strong></p>
+
+</body>
+</html>

@@ -1,9 +1,9 @@
 # Thesis Content Guard
 
-**Version:** 1.0.0  
-**Date:** January 13, 2026  
-**Status:** Production Ready  
-**Live URL:** https://thesisguardian.vercel.app  
+**Version:** 1.0.0
+**Date:** January 13, 2026
+**Status:** Production Ready
+**Live URL:** https://thesisguardian.vercel.app
 
 ---
 
@@ -13,10 +13,10 @@ Thesis Content Guard is a two phase system that combines Content Moderation with
 
 ### Two Phase Process
 
-| Phase | Purpose | Outcome |
-|:------|:--------|:--------|
-| Phase 1: Content Moderation | Filters spam, scams, offensive content, and off topic submissions | PASS, FLAG, or BLOCK |
-| Phase 2: Thesis Analysis | Scores the thesis using machine learning and language models | Detailed report with letter grade |
+| Phase                       | Purpose                                                           | Outcome                           |
+| :-------------------------- | :---------------------------------------------------------------- | :-------------------------------- |
+| Phase 1: Content Moderation | Filters spam, scams, offensive content, and off topic submissions | PASS, FLAG, or BLOCK              |
+| Phase 2: Thesis Analysis    | Scores the thesis using machine learning and language models      | Detailed report with letter grade |
 
 ---
 
@@ -35,18 +35,18 @@ graph TD
         C --> D["TextPreprocessor<br/>(Clean text, decode tricks)"]
         D --> E["LinguisticAnalyzer<br/>(spaCy NLP: entities, negations)"]
         E --> F["DomainChecker<br/>(Finance relevance check)"]
-        
+    
         F -->|"Not Finance"| G["BLOCK: Off Topic"]
         F -->|"Finance Related"| H["Safety Checks (Parallel)"]
-        
+    
         H --> I["RuleEngine<br/>(Scam patterns)"]
         H --> J["ToxicityChecker<br/>(Profanity, hate speech)"]
         H --> K["FuzzyMatcher<br/>(Misspelled scams)"]
-        
+    
         I --> L["DecisionEngine<br/>(Combine scores)"]
         J --> L
         K --> L
-        
+    
         L -->|"Risk >= 0.5"| M["BLOCK"]
         L -->|"Risk >= 0.2"| N["FLAG"]
         L -->|"Risk < 0.2"| O["PASS"]
@@ -54,13 +54,13 @@ graph TD
 
     subgraph "PHASE 2: THESIS ANALYSIS"
         O -->|"POST /api/analyze"| P["Thesis Analyzer"]
-        
+    
         P --> Q["spaCy NLP<br/>(Sentence parsing)"]
         P --> R["SentenceTransformers<br/>(Vector embeddings)"]
-        
+    
         Q --> S["ML Scoring Layer<br/>(Evidence, Clarity, Risk)"]
         R --> S
-        
+    
         S --> T["LLM Refinement<br/>(OpenAI GPT-4o-mini)"]
         T --> U["StrengthReport<br/>(5 dimensions + grade)"]
     end
@@ -80,15 +80,15 @@ graph TD
 
 The moderation system processes content through multiple checks:
 
-| Step | Component | What It Does |
-|:-----|:----------|:-------------|
-| 1 | TextPreprocessor | Cleans text and decodes tricks like "gu4r4nt33d" to "guaranteed" |
-| 2 | LinguisticAnalyzer | Identifies names, companies, and understands context like "not a scam" |
-| 3 | DomainChecker | Confirms the content is about finance and investing |
-| 4a | RuleEngine | Detects known scam phrases and patterns |
-| 4b | ToxicityChecker | Catches profanity, hate speech, and personal attacks |
-| 4c | FuzzyMatcher | Finds misspelled scam words |
-| 5 | DecisionEngine | Combines all scores and makes the final decision |
+| Step | Component          | What It Does                                                           |
+| :--- | :----------------- | :--------------------------------------------------------------------- |
+| 1    | TextPreprocessor   | Cleans text and decodes tricks like "gu4r4nt33d" to "guaranteed"       |
+| 2    | LinguisticAnalyzer | Identifies names, companies, and understands context like "not a scam" |
+| 3    | DomainChecker      | Confirms the content is about finance and investing                    |
+| 4a   | RuleEngine         | Detects known scam phrases and patterns                                |
+| 4b   | ToxicityChecker    | Catches profanity, hate speech, and personal attacks                   |
+| 4c   | FuzzyMatcher       | Finds misspelled scam words                                            |
+| 5    | DecisionEngine     | Combines all scores and makes the final decision                       |
 
 ### 3.2 Component Details
 
@@ -104,11 +104,11 @@ The moderation system processes content through multiple checks:
 
 **DecisionEngine** produces the final verdict based on combined risk scores.
 
-| Risk Score | Decision |
-|:-----------|:---------|
-| 0.5 or higher | BLOCK |
-| 0.2 to 0.5 | FLAG for review |
-| Below 0.2 | PASS |
+| Risk Score    | Decision        |
+| :------------ | :-------------- |
+| 0.5 or higher | BLOCK           |
+| 0.2 to 0.5    | FLAG for review |
+| Below 0.2     | PASS            |
 
 ---
 
@@ -118,13 +118,13 @@ The moderation system processes content through multiple checks:
 
 The analyzer evaluates five areas, each worth 20 points:
 
-| Dimension | What It Measures |
-|:----------|:-----------------|
-| Evidence Quality | Balance of facts versus opinions, use of citations |
-| Logical Coherence | How well arguments support the conclusion |
-| Risk Awareness | Whether counter arguments are addressed |
-| Clarity | Readability and appropriate use of financial terms |
-| Actionability | Practical investment guidance provided |
+| Dimension         | What It Measures                                   |
+| :---------------- | :------------------------------------------------- |
+| Evidence Quality  | Balance of facts versus opinions, use of citations |
+| Logical Coherence | How well arguments support the conclusion          |
+| Risk Awareness    | Whether counter arguments are addressed            |
+| Clarity           | Readability and appropriate use of financial terms |
+| Actionability     | Practical investment guidance provided             |
 
 ### 4.2 Processing Architecture
 
@@ -152,13 +152,13 @@ The system uses local machine learning for speed, then refines results with a la
 
 ### 4.3 Grading Scale
 
-| Score | Grade | Meaning |
-|:------|:------|:--------|
-| 80 to 100 | A | Excellent |
-| 70 to 79 | B | Good |
-| 60 to 69 | C | Average |
-| 50 to 59 | D | Below average |
-| 0 to 49 | F | Needs significant improvement |
+| Score     | Grade | Meaning                       |
+| :-------- | :---- | :---------------------------- |
+| 80 to 100 | A     | Excellent                     |
+| 70 to 79  | B     | Good                          |
+| 60 to 69  | C     | Average                       |
+| 50 to 59  | D     | Below average                 |
+| 0 to 49   | F     | Needs significant improvement |
 
 ---
 
@@ -166,18 +166,19 @@ The system uses local machine learning for speed, then refines results with a la
 
 ### 5.1 Available Endpoints
 
-| Method | Endpoint | Purpose |
-|:-------|:---------|:--------|
-| GET | / | Basic health check |
-| GET | /api/health | Detailed system status |
-| POST | /api/moderate | Check content for issues |
-| POST | /api/analyze | Analyze thesis strength |
-| POST | /api/manual-review | Request human review |
-| GET | /api/warmup | Prepare models for faster response |
+| Method | Endpoint           | Purpose                            |
+| :----- | :----------------- | :--------------------------------- |
+| GET    | /                  | Basic health check                 |
+| GET    | /api/health        | Detailed system status             |
+| POST   | /api/moderate      | Check content for issues           |
+| POST   | /api/analyze       | Analyze thesis strength            |
+| POST   | /api/manual-review | Request human review               |
+| GET    | /api/warmup        | Prepare models for faster response |
 
 ### 5.2 Moderation API
 
 **Request:**
+
 ```json
 {
   "text": "Your thesis content here..."
@@ -185,6 +186,7 @@ The system uses local machine learning for speed, then refines results with a la
 ```
 
 **Response:**
+
 ```json
 {
   "decision": "PASS",
@@ -201,6 +203,7 @@ The system uses local machine learning for speed, then refines results with a la
 **Request:** Send as form data with file upload
 
 **Response:**
+
 ```json
 {
   "overall_score": 67.5,
@@ -225,14 +228,15 @@ The system uses local machine learning for speed, then refines results with a la
 
 ### 6.1 Infrastructure
 
-| Component | Platform | URL |
-|:----------|:---------|:----|
-| Frontend | Vercel | https://thesisguardian.vercel.app |
-| Backend | Render with Docker | https://content-moderation-for-thesis.onrender.com |
+| Component | Platform           | URL                                                |
+| :-------- | :----------------- | :------------------------------------------------- |
+| Frontend  | Vercel             | https://thesisguardian.vercel.app                  |
+| Backend   | Render with Docker | https://content-moderation-for-thesis.onrender.com |
 
 ### 6.2 Docker Setup
 
 The Dockerfile includes several optimizations:
+
 1. Uses CPU only version of PyTorch to reduce size by 2GB
 2. Pre downloads the spaCy language model during build
 3. Pre downloads the sentence transformer model during build
@@ -240,10 +244,10 @@ The Dockerfile includes several optimizations:
 
 ### 6.3 Required Settings
 
-| Variable | Required | Purpose |
-|:---------|:---------|:--------|
-| OPENAI_API_KEY | Yes | Access to OpenAI language model |
-| LIGHTWEIGHT_MODE | No | Reduces memory usage when enabled |
+| Variable         | Required | Purpose                           |
+| :--------------- | :------- | :-------------------------------- |
+| OPENAI_API_KEY   | Yes      | Access to OpenAI language model   |
+| LIGHTWEIGHT_MODE | No       | Reduces memory usage when enabled |
 
 ---
 
@@ -312,6 +316,7 @@ class ModerationConfig:
 ### 8.2 Lightweight Mode
 
 When LIGHTWEIGHT_MODE is set to true:
+
 - Fuzzy matching is disabled (saves about 10MB of memory)
 - Semantic checking is disabled (saves about 150MB of memory)
 - Rule based and linguistic analysis remain active
@@ -321,37 +326,27 @@ When LIGHTWEIGHT_MODE is set to true:
 
 ## 9. Performance
 
-| Metric | Value |
-|:-------|:------|
-| Legitimate Finance Pass Rate | 100% |
-| Scam Detection Rate | Above 90% |
-| Off Topic Detection | Above 85% |
-| Moderation Response Time | Under 500ms |
-| Analysis Time | 15 to 30 seconds |
-| Docker Cold Start | 5 to 10 seconds |
-| Python Cold Start | 30 to 60 seconds |
+| Metric                       | Value            |
+| :--------------------------- | :--------------- |
+| Legitimate Finance Pass Rate | 100%             |
+| Scam Detection Rate          | Above 90%        |
+| Off Topic Detection          | Above 85%        |
+| Moderation Response Time     | Under 500ms      |
+| Analysis Time                | 15 to 30 seconds |
+| Docker Cold Start            | 5 to 10 seconds  |
+| Python Cold Start            | 30 to 60 seconds |
 
 ---
 
 ## 10. Troubleshooting
 
-| Issue | Cause | Solution |
-|:------|:------|:---------|
-| CORS Error | Backend not accepting frontend requests | Check allow_origins setting in main.py |
-| Model Not Found | Incorrect model name specified | Use en_core_web_sm |
-| Out of Memory | Excessive RAM usage | Enable LIGHTWEIGHT_MODE |
-| Slow Startup | Models being downloaded at runtime | Use Docker with pre built models |
-| Network Error | Backend server is sleeping | Wait 30 seconds for the free tier to wake up |
-
----
-
-## 11. Future Improvements
-
-- Real time content preview while typing
-- Batch analysis for multiple documents
-- Custom vocabulary training
-- Support for additional languages
-- PDF and DOCX file uploads
+| Issue           | Cause                                   | Solution                                     |
+| :-------------- | :-------------------------------------- | :------------------------------------------- |
+| CORS Error      | Backend not accepting frontend requests | Check allow_origins setting in main.py       |
+| Model Not Found | Incorrect model name specified          | Use en_core_web_sm                           |
+| Out of Memory   | Excessive RAM usage                     | Enable LIGHTWEIGHT_MODE                      |
+| Slow Startup    | Models being downloaded at runtime      | Use Docker with pre built models             |
+| Network Error   | Backend server is sleeping              | Wait 30 seconds for the free tier to wake up |
 
 ---
 

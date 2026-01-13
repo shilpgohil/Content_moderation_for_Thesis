@@ -219,11 +219,14 @@ class ToxicityChecker:
             "matched": []
         }
         
-        # Skip if whitelist context is present (news/educational content)
+        # Check if whitelist context is present (news/educational content)
+        # NOTE: This only affects scam-related checks, NOT profanity/hate speech
+        is_whitelisted = False
         for context in self.WHITELIST_CONTEXTS:
             if context in text_lower:
                 result["skipped_context"] = context
-                return result
+                is_whitelisted = True
+                break
         
         # Check standard toxicity categories
         # Config format: (pattern_set, category_name, toxicity_score)
