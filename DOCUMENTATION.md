@@ -1,28 +1,28 @@
-# Thesis Content Guard - Complete Technical Documentation
+# Thesis Content Guard
 
 **Version:** 1.0.0  
 **Date:** January 13, 2026  
-**Status:** Production Ready (Live)  
+**Status:** Production Ready  
 **Live URL:** https://thesisguardian.vercel.app  
 
 ---
 
-## 1. Executive Overview
+## 1. Overview
 
-**Thesis Content Guard** is a two-phase intelligent system that combines **Content Moderation** with **Thesis Strength Analysis**. It ensures that only legitimate, finance-relevant content passes through to be analyzed, then provides comprehensive scoring and feedback on investment thesis quality.
+Thesis Content Guard is a two phase system that combines Content Moderation with Thesis Strength Analysis. The system first checks if the content is safe and relevant to finance, then provides a detailed quality assessment.
 
-### Why Two Phases?
+### Two Phase Process
 
 | Phase | Purpose | Outcome |
 |:------|:--------|:--------|
-| **Phase 1: Content Moderation** | Filter spam, scams, toxicity, off-topic content | PASS, FLAG, or BLOCK |
-| **Phase 2: Thesis Analysis** | Score thesis across 5 dimensions with ML + LLM | Detailed report with grade |
+| Phase 1: Content Moderation | Filters spam, scams, offensive content, and off topic submissions | PASS, FLAG, or BLOCK |
+| Phase 2: Thesis Analysis | Scores the thesis using machine learning and language models | Detailed report with letter grade |
 
 ---
 
 ## 2. System Architecture
 
-### 2.1 Complete End-to-End Flow
+### 2.1 Complete Flow
 
 ```mermaid
 graph TD
@@ -36,7 +36,7 @@ graph TD
         D --> E["LinguisticAnalyzer<br/>(spaCy NLP: entities, negations)"]
         E --> F["DomainChecker<br/>(Finance relevance check)"]
         
-        F -->|"Not Finance"| G["❌ BLOCK: Off Topic"]
+        F -->|"Not Finance"| G["BLOCK: Off Topic"]
         F -->|"Finance Related"| H["Safety Checks (Parallel)"]
         
         H --> I["RuleEngine<br/>(Scam patterns)"]
@@ -47,9 +47,9 @@ graph TD
         J --> L
         K --> L
         
-        L -->|"Risk >= 0.5"| M["❌ BLOCK"]
-        L -->|"Risk >= 0.2"| N["⚠️ FLAG"]
-        L -->|"Risk < 0.2"| O["✅ PASS"]
+        L -->|"Risk >= 0.5"| M["BLOCK"]
+        L -->|"Risk >= 0.2"| N["FLAG"]
+        L -->|"Risk < 0.2"| O["PASS"]
     end
 
     subgraph "PHASE 2: THESIS ANALYSIS"
@@ -74,88 +74,59 @@ graph TD
 
 ---
 
-## 3. Phase 1: Content Moderation Module
+## 3. Phase 1: Content Moderation
 
-### 3.1 Pipeline Overview
+### 3.1 Pipeline Steps
 
-The Content Moderation pipeline processes content through 6 sequential/parallel steps:
+The moderation system processes content through multiple checks:
 
-| Step | Component | Purpose |
-|:-----|:----------|:--------|
-| 1 | TextPreprocessor | Clean input, decode obfuscation (h3ll0 → hello) |
-| 2 | LinguisticAnalyzer | NLP analysis: entities, negations, dependencies |
-| 3 | DomainChecker | Verify content is finance-related |
-| 4a | RuleEngine | Pattern match known scam phrases |
-| 4b | ToxicityChecker | Detect profanity, hate speech, attacks |
-| 4c | FuzzyMatcher | Catch misspelled scam terms |
-| 5 | DecisionEngine | Combine scores, produce verdict |
+| Step | Component | What It Does |
+|:-----|:----------|:-------------|
+| 1 | TextPreprocessor | Cleans text and decodes tricks like "gu4r4nt33d" to "guaranteed" |
+| 2 | LinguisticAnalyzer | Identifies names, companies, and understands context like "not a scam" |
+| 3 | DomainChecker | Confirms the content is about finance and investing |
+| 4a | RuleEngine | Detects known scam phrases and patterns |
+| 4b | ToxicityChecker | Catches profanity, hate speech, and personal attacks |
+| 4c | FuzzyMatcher | Finds misspelled scam words |
+| 5 | DecisionEngine | Combines all scores and makes the final decision |
 
-### 3.2 Core Components
+### 3.2 Component Details
 
-#### TextPreprocessor (`pipeline/preprocessor.py`)
-| Feature | Description |
-|:--------|:------------|
-| Leet Speak Decoding | Converts "gu4r4nt33d" to "guaranteed" |
-| Currency Protection | Preserves $, €, ₹ symbols |
-| URL Extraction | Identifies external links |
+**TextPreprocessor** cleans the input by converting obfuscated text back to normal words and identifying links.
 
-#### LinguisticAnalyzer (`pipeline/linguistic_analyzer.py`)
-| Feature | Description |
-|:--------|:------------|
-| Named Entity Recognition | Identifies PERSON, ORG, MONEY entities |
-| Negation Detection | Maps "not a scam" correctly |
-| Dependency Parsing | Subject-Verb-Object extraction |
+**LinguisticAnalyzer** uses the spaCy language model to understand sentence structure and recognize when negative words change meaning.
 
-**Model:** Uses `en_core_web_sm` spaCy model with lazy loading.
+**DomainChecker** verifies that content relates to finance. Content below 0.05 relevance score is blocked as off topic.
 
-#### DomainChecker (`pipeline/domain_checker.py`)
-| Threshold | Value | Effect |
-|:----------|:------|:-------|
-| `finance_flag_threshold` | 0.05 | Below: BLOCK as off-topic |
-| `finance_pass_threshold` | 0.15 | Below: FLAG for review |
+**RuleEngine** looks for scam patterns but reduces the score when content contains warnings or disclaimers.
 
-#### RuleEngine (`pipeline/rule_engine.py`)
-**Context Reductions:**
-| Context | Reduction |
-|:--------|:----------|
-| Warning phrase | 70% |
-| Disclaimer | 40% |
-| Past tense | 30% |
-| Opinion marker | 20% |
+**ToxicityChecker** identifies hate speech, personal attacks, profanity, and threats.
 
-#### ToxicityChecker (`pipeline/toxicity_checker.py`)
-| Category | Description |
-|:---------|:------------|
-| Hate Speech | Discriminatory language |
-| Personal Attack | Direct insults |
-| Severe Profanity | Strong offensive language |
-| Threats | Violent intent |
+**DecisionEngine** produces the final verdict based on combined risk scores.
 
-#### DecisionEngine (`pipeline/decision_engine.py`)
-
-**Decision Matrix:**
-| Condition | Verdict |
-|:----------|:--------|
-| Risk >= 0.5 OR High Severity | BLOCK |
-| Risk >= 0.2 | FLAG |
-| Risk < 0.2 | PASS |
-| Finance Score < 0.05 | BLOCK (Off-topic) |
+| Risk Score | Decision |
+|:-----------|:---------|
+| 0.5 or higher | BLOCK |
+| 0.2 to 0.5 | FLAG for review |
+| Below 0.2 | PASS |
 
 ---
 
-## 4. Phase 2: Thesis Strength Analyzer
+## 4. Phase 2: Thesis Analyzer
 
 ### 4.1 Scoring Dimensions
 
-| Dimension | Weight | Description |
-|:----------|:-------|:------------|
-| Evidence Quality | 20% | Fact vs opinion balance, citations |
-| Logical Coherence | 20% | Arguments support conclusion |
-| Risk Awareness | 20% | Counter-arguments addressed |
-| Clarity | 20% | Readability, jargon usage |
-| Actionability | 20% | Practical investment guidance |
+The analyzer evaluates five areas, each worth 20 points:
 
-### 4.2 Hybrid ML + LLM Architecture
+| Dimension | What It Measures |
+|:----------|:-----------------|
+| Evidence Quality | Balance of facts versus opinions, use of citations |
+| Logical Coherence | How well arguments support the conclusion |
+| Risk Awareness | Whether counter arguments are addressed |
+| Clarity | Readability and appropriate use of financial terms |
+| Actionability | Practical investment guidance provided |
+
+### 4.2 Processing Architecture
 
 ```mermaid
 graph LR
@@ -177,32 +148,34 @@ graph LR
     I --> J["Final Report<br/>(Grade A-F)"]
 ```
 
+The system uses local machine learning for speed, then refines results with a language model for better insights.
+
 ### 4.3 Grading Scale
 
-| Score Range | Grade | Interpretation |
-|:------------|:------|:---------------|
-| 80-100 | A | Excellent thesis |
-| 70-79 | B | Good thesis |
-| 60-69 | C | Average thesis |
-| 50-59 | D | Below average |
-| 0-49 | F | Needs significant work |
+| Score | Grade | Meaning |
+|:------|:------|:--------|
+| 80 to 100 | A | Excellent |
+| 70 to 79 | B | Good |
+| 60 to 69 | C | Average |
+| 50 to 59 | D | Below average |
+| 0 to 49 | F | Needs significant improvement |
 
 ---
 
 ## 5. API Reference
 
-### 5.1 Endpoints
+### 5.1 Available Endpoints
 
 | Method | Endpoint | Purpose |
 |:-------|:---------|:--------|
-| GET | `/` | Health check |
-| GET | `/api/health` | Detailed health status |
-| POST | `/api/moderate` | Content moderation |
-| POST | `/api/analyze` | Thesis analysis |
-| POST | `/api/manual-review` | Submit for human review |
-| GET | `/api/warmup` | Pre-warm ML models |
+| GET | / | Basic health check |
+| GET | /api/health | Detailed system status |
+| POST | /api/moderate | Check content for issues |
+| POST | /api/analyze | Analyze thesis strength |
+| POST | /api/manual-review | Request human review |
+| GET | /api/warmup | Prepare models for faster response |
 
-### 5.2 Moderation Request/Response
+### 5.2 Moderation API
 
 **Request:**
 ```json
@@ -223,9 +196,9 @@ graph LR
 }
 ```
 
-### 5.3 Analysis Request/Response
+### 5.3 Analysis API
 
-**Request:** `multipart/form-data` with file upload
+**Request:** Send as form data with file upload
 
 **Response:**
 ```json
@@ -248,29 +221,29 @@ graph LR
 
 ---
 
-## 6. Deployment Architecture
+## 6. Deployment
 
 ### 6.1 Infrastructure
 
 | Component | Platform | URL |
 |:----------|:---------|:----|
 | Frontend | Vercel | https://thesisguardian.vercel.app |
-| Backend | Render (Docker) | https://content-moderation-for-thesis.onrender.com |
+| Backend | Render with Docker | https://content-moderation-for-thesis.onrender.com |
 
-### 6.2 Docker Configuration
+### 6.2 Docker Setup
 
-**Key Optimizations in `backend/Dockerfile`:**
-1. CPU-only PyTorch (saves 2GB)
-2. Pre-downloaded spaCy model
-3. Pre-downloaded SentenceTransformer model
-4. Lazy loading for runtime efficiency
+The Dockerfile includes several optimizations:
+1. Uses CPU only version of PyTorch to reduce size by 2GB
+2. Pre downloads the spaCy language model during build
+3. Pre downloads the sentence transformer model during build
+4. Uses lazy loading to reduce startup memory
 
-### 6.3 Environment Variables
+### 6.3 Required Settings
 
 | Variable | Required | Purpose |
 |:---------|:---------|:--------|
-| `OPENAI_API_KEY` | Yes | LLM API access |
-| `LIGHTWEIGHT_MODE` | Optional | Disable heavy ML features |
+| OPENAI_API_KEY | Yes | Access to OpenAI language model |
+| LIGHTWEIGHT_MODE | No | Reduces memory usage when enabled |
 
 ---
 
@@ -317,15 +290,15 @@ thesis_content_guard/
 
 ---
 
-## 8. Configuration Reference
+## 8. Configuration
 
-### 8.1 Moderation Config (`config.py`)
+### 8.1 Moderation Settings
 
 ```python
 @dataclass
 class ModerationConfig:
-    block_threshold: float = 0.5    # Risk score to auto-block
-    flag_threshold: float = 0.2     # Risk score to flag
+    block_threshold: float = 0.5
+    flag_threshold: float = 0.2
     finance_pass_threshold: float = 0.15
     finance_flag_threshold: float = 0.05
     scam_weight: float = 0.7
@@ -338,49 +311,47 @@ class ModerationConfig:
 
 ### 8.2 Lightweight Mode
 
-When `LIGHTWEIGHT_MODE=true`:
-- Disables fuzzy matching (saves ~10MB RAM)
-- Disables semantic checking (saves ~150MB RAM)
-- Keeps rule-based and linguistic analysis
-- Maintains 85%+ detection accuracy
+When LIGHTWEIGHT_MODE is set to true:
+- Fuzzy matching is disabled (saves about 10MB of memory)
+- Semantic checking is disabled (saves about 150MB of memory)
+- Rule based and linguistic analysis remain active
+- Detection accuracy stays above 85%
 
 ---
 
-## 9. Performance Metrics
+## 9. Performance
 
 | Metric | Value |
 |:-------|:------|
 | Legitimate Finance Pass Rate | 100% |
-| Scam Detection Rate | 90%+ |
-| Off-topic Detection | 85%+ |
-| Average Moderation Time | < 500ms |
-| Average Analysis Time | 15-30s |
-| Cold Start (Docker) | 5-10s |
-| Cold Start (Python) | 30-60s |
+| Scam Detection Rate | Above 90% |
+| Off Topic Detection | Above 85% |
+| Moderation Response Time | Under 500ms |
+| Analysis Time | 15 to 30 seconds |
+| Docker Cold Start | 5 to 10 seconds |
+| Python Cold Start | 30 to 60 seconds |
 
 ---
 
-## 10. Troubleshooting Guide
-
-### Common Issues
+## 10. Troubleshooting
 
 | Issue | Cause | Solution |
 |:------|:------|:---------|
-| CORS Error | Backend not allowing frontend origin | Check `allow_origins` in main.py |
-| spaCy Model Not Found | Wrong model name | Use `en_core_web_sm` |
-| OOM on Render | Too much RAM usage | Enable LIGHTWEIGHT_MODE |
-| Slow Cold Start | Models downloading at runtime | Use Docker with pre-baked models |
-| Network Error | Backend sleeping | Wait 30s for free tier wake-up |
+| CORS Error | Backend not accepting frontend requests | Check allow_origins setting in main.py |
+| Model Not Found | Incorrect model name specified | Use en_core_web_sm |
+| Out of Memory | Excessive RAM usage | Enable LIGHTWEIGHT_MODE |
+| Slow Startup | Models being downloaded at runtime | Use Docker with pre built models |
+| Network Error | Backend server is sleeping | Wait 30 seconds for the free tier to wake up |
 
 ---
 
-## 11. Future Enhancements
+## 11. Future Improvements
 
-- [ ] Real-time content preview during typing
-- [ ] Batch analysis for multiple theses
-- [ ] Custom vocabulary training
-- [ ] Multi-language support
-- [ ] PDF/DOCX file upload support
+- Real time content preview while typing
+- Batch analysis for multiple documents
+- Custom vocabulary training
+- Support for additional languages
+- PDF and DOCX file uploads
 
 ---
 
