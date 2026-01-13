@@ -248,57 +248,16 @@ graph LR
 
 ---
 
-## 6. Frontend Architecture
+## 6. Deployment Architecture
 
-### 6.1 Component Structure
-
-```
-frontend/src/
-├── App.jsx              # Main controller, state management
-├── api/
-│   └── analyzer.js      # API calls with auto-URL detection
-└── components/
-    ├── Hero.jsx              # Title and feature cards
-    ├── UploadSection.jsx     # Text input area
-    ├── LoadingState.jsx      # Moderation loading animation
-    ├── ModerationBlockedView.jsx  # Issue display with animations
-    └── AnalysisDashboard.jsx  # Results visualization
-```
-
-### 6.2 State Flow
-
-```mermaid
-stateDiagram-v2
-    [*] --> upload: Initial
-    upload --> moderating: Click Analyze
-    moderating --> moderation_blocked: Issues Found
-    moderating --> loading: Moderation Passed
-    loading --> dashboard: Analysis Complete
-    moderation_blocked --> upload: Edit Content
-    dashboard --> upload: Analyze New
-```
-
-### 6.3 Key Features
-
-| Feature | Implementation |
-|:--------|:---------------|
-| Smooth Animations | Framer Motion |
-| Focus/Fade Effect | Dim other issues when one expanded |
-| Auto-URL Detection | localhost vs production |
-| Loading States | Separate for moderation and analysis |
-
----
-
-## 7. Deployment Architecture
-
-### 7.1 Infrastructure
+### 6.1 Infrastructure
 
 | Component | Platform | URL |
 |:----------|:---------|:----|
 | Frontend | Vercel | https://thesisguardian.vercel.app |
 | Backend | Render (Docker) | https://content-moderation-for-thesis.onrender.com |
 
-### 7.2 Docker Configuration
+### 6.2 Docker Configuration
 
 **Key Optimizations in `backend/Dockerfile`:**
 1. CPU-only PyTorch (saves 2GB)
@@ -306,7 +265,7 @@ stateDiagram-v2
 3. Pre-downloaded SentenceTransformer model
 4. Lazy loading for runtime efficiency
 
-### 7.3 Environment Variables
+### 6.3 Environment Variables
 
 | Variable | Required | Purpose |
 |:---------|:---------|:--------|
@@ -315,7 +274,7 @@ stateDiagram-v2
 
 ---
 
-## 8. File Structure
+## 7. File Structure
 
 ```
 thesis_content_guard/
@@ -358,9 +317,9 @@ thesis_content_guard/
 
 ---
 
-## 9. Configuration Reference
+## 8. Configuration Reference
 
-### 9.1 Moderation Config (`config.py`)
+### 8.1 Moderation Config (`config.py`)
 
 ```python
 @dataclass
@@ -377,7 +336,7 @@ class ModerationConfig:
     enable_semantic: bool = True
 ```
 
-### 9.2 Lightweight Mode
+### 8.2 Lightweight Mode
 
 When `LIGHTWEIGHT_MODE=true`:
 - Disables fuzzy matching (saves ~10MB RAM)
@@ -387,7 +346,7 @@ When `LIGHTWEIGHT_MODE=true`:
 
 ---
 
-## 10. Performance Metrics
+## 9. Performance Metrics
 
 | Metric | Value |
 |:-------|:------|
@@ -401,7 +360,7 @@ When `LIGHTWEIGHT_MODE=true`:
 
 ---
 
-## 11. Troubleshooting Guide
+## 10. Troubleshooting Guide
 
 ### Common Issues
 
@@ -415,7 +374,7 @@ When `LIGHTWEIGHT_MODE=true`:
 
 ---
 
-## 12. Future Enhancements
+## 11. Future Enhancements
 
 - [ ] Real-time content preview during typing
 - [ ] Batch analysis for multiple theses
