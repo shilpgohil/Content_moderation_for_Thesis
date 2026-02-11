@@ -19,42 +19,42 @@ export default function LoadingState({ message = "Analyzing Your Thesis" }) {
                 transition={{ duration: 0.5 }}
                 className="text-center"
             >
-                {/* Animated nucleus/atom */}
+                {}
                 <div className="relative w-32 h-32 mx-auto mb-8">
-                    {/* Outer rotating orbit */}
+                    {}
                     <motion.div
                         className="absolute inset-0"
                         animate={{ rotate: 360 }}
                         transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
                     >
                         <div className="absolute inset-0 rounded-full border-2 border-dashed border-primary-500/30" />
-                        {/* Electron 1 */}
+                        {}
                         <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-primary-400 glow-primary" />
                     </motion.div>
 
-                    {/* Middle rotating orbit */}
+                    {}
                     <motion.div
                         className="absolute inset-2"
                         animate={{ rotate: -360 }}
                         transition={{ duration: 6, repeat: Infinity, ease: 'linear' }}
                     >
                         <div className="absolute inset-0 rounded-full border-2 border-dashed border-cyan-500/30" />
-                        {/* Electron 2 */}
+                        {}
                         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-3 h-3 rounded-full bg-cyan-400" />
                     </motion.div>
 
-                    {/* Inner rotating orbit */}
+                    {}
                     <motion.div
                         className="absolute inset-4"
                         animate={{ rotate: 360 }}
                         transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
                     >
                         <div className="absolute inset-0 rounded-full border-2 border-dashed border-purple-500/30" />
-                        {/* Electron 3 */}
+                        {}
                         <div className="absolute right-0 top-1/2 translate-x-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-purple-400" />
                     </motion.div>
 
-                    {/* Core nucleus */}
+                    {}
                     <motion.div
                         className="absolute inset-0 flex items-center justify-center"
                         animate={{ scale: [1, 1.1, 1] }}
@@ -71,7 +71,7 @@ export default function LoadingState({ message = "Analyzing Your Thesis" }) {
                     Deep learning models processing your content...
                 </p>
 
-                {/* Progress steps */}
+                {}
                 <div className="max-w-sm mx-auto">
                     {steps.map((step, i) => (
                         <motion.div

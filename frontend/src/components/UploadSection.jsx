@@ -69,7 +69,7 @@ export default function UploadSection({ onAnalyze, error, initialText = '' }) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
             >
-                {/* Error display */}
+                {}
                 {error && (
                     <motion.div
                         initial={{ opacity: 0, y: -10 }}
@@ -81,7 +81,7 @@ export default function UploadSection({ onAnalyze, error, initialText = '' }) {
                     </motion.div>
                 )}
 
-                {/* Textarea */}
+                {}
                 <div
                     className={`relative rounded-2xl border-2 transition-colors duration-200 ${dragActive
                         ? 'border-primary-500 bg-primary-500/5'
@@ -98,12 +98,12 @@ export default function UploadSection({ onAnalyze, error, initialText = '' }) {
                         className="w-full h-64 p-6 bg-transparent text-white placeholder-gray-500 rounded-2xl focus:outline-none focus:ring-0"
                     />
 
-                    {/* Character count */}
+                    {}
                     <div className="absolute bottom-4 right-4 text-sm text-gray-500">
                         {text.length} characters
                     </div>
 
-                    {/* Upload icon overlay when empty */}
+                    {}
                     {!text && (
                         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none opacity-30">
                             <Upload className="w-12 h-12 text-gray-500 mb-2" />
@@ -112,7 +112,7 @@ export default function UploadSection({ onAnalyze, error, initialText = '' }) {
                     )}
                 </div>
 
-                {/* Action buttons */}
+                {}
                 <div className="flex flex-wrap gap-4 mt-6">
                     <motion.button
                         type="submit"
@@ -136,7 +136,7 @@ export default function UploadSection({ onAnalyze, error, initialText = '' }) {
                     </motion.button>
                 </div>
 
-                {/* Min length hint */}
+                {}
                 {text.length > 0 && text.length < 50 && (
                     <p className="mt-3 text-sm text-yellow-500">
                         Minimum 50 characters required ({50 - text.length} more needed)

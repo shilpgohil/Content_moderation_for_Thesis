@@ -7,7 +7,7 @@ export default function AuditTable({ auditTable, logicChain }) {
 
     return (
         <div className="space-y-10">
-            {/* Fact vs Assumption Audit */}
+            {}
             <div>
                 <div className="flex items-center gap-3 mb-6">
                     <AlertCircle className="w-6 h-6 text-yellow-400" />
@@ -26,7 +26,7 @@ export default function AuditTable({ auditTable, logicChain }) {
                                 key={i}
                                 className="p-5 rounded-xl bg-dark-card border border-dark-border hover:border-yellow-500/30 transition-colors"
                             >
-                                {/* Header row */}
+                                {}
                                 <div className="flex items-center gap-4 mb-3">
                                     <span className="text-gray-500 font-mono text-sm">
                                         #{entry.sentence_index}
@@ -42,12 +42,12 @@ export default function AuditTable({ auditTable, logicChain }) {
                                     </div>
                                 </div>
 
-                                {/* Statement */}
+                                {}
                                 <p className="text-gray-300 mb-3 leading-relaxed">
                                     "{entry.statement}"
                                 </p>
 
-                                {/* Issue */}
+                                {}
                                 <div className="flex items-start gap-2 p-3 rounded-lg bg-yellow-500/5 border border-yellow-500/20">
                                     <AlertCircle className="w-4 h-4 text-yellow-400 flex-shrink-0 mt-0.5" />
                                     <span className="text-yellow-300 text-sm">{entry.issue}</span>
@@ -66,7 +66,7 @@ export default function AuditTable({ auditTable, logicChain }) {
                 )}
             </div>
 
-            {/* Logic Chain */}
+            {}
             <div>
                 <div className="flex items-center gap-3 mb-6">
                     <Link2 className="w-6 h-6 text-primary-400" />

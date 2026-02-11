@@ -1,9 +1,4 @@
-"""
-Thesis Content Guard - Unified Backend API
-Combines Content Moderation + Thesis Strength Analyzer
 
-Flow: User submits thesis → Moderation check → If PASS → Thesis analysis
-"""
 
 import os
 import logging
@@ -12,7 +7,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.concurrency import run_in_threadpool
 from pydantic import BaseModel
 
-# Import modules
 from moderator_api import (
     ModerationRequest, ModerationResponse, 
     ManualReviewRequest, ManualReviewResponse,
@@ -28,7 +22,6 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Initialize FastAPI
 app = FastAPI(
     title="Thesis Content Guard API",
     description="Content Moderation + Thesis Strength Analyzer",
@@ -43,16 +36,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
-# ============ Startup Event - Pre-warm Models ============
-
 @app.on_event("startup")
 async def startup_event():
-    """
-    Pre-load all ML models on startup to eliminate cold start latency.
-    This runs automatically when the server starts.
-    """
     logger.info("Pre-warming ML models on startup...")
     try:
         # Warm up shared models (single instances for all modules)
@@ -67,33 +52,21 @@ async def startup_event():
         logger.info("All models pre-warmed successfully - ready for requests")
     except Exception as e:
         logger.warning(f"Startup warmup partial failure (non-fatal): {e}")
-
-
-# ============ Health Check ============
-
-
 @app.get("/")
 async def root():
-    """Health check endpoint."""
     return {
         "status": "ok",
         "service": "Thesis Content Guard API",
         "endpoints": ["/api/moderate", "/api/analyze", "/api/manual-review"]
     }
 
-
 @app.get("/api/health")
 async def health():
-    """Detailed health check."""
     return {
         "status": "healthy",
         "moderation": "ready",
         "analysis": "ready"
     }
-
-
-# ============ Content Moderation ============
-
 @app.post("/api/moderate", response_model=ModerationResponse)
 async def moderate_thesis(request: ModerationRequest):
     """
@@ -108,7 +81,6 @@ async def moderate_thesis(request: ModerationRequest):
         if not request.text or len(request.text.strip()) < 10:
             raise HTTPException(status_code=400, detail="Text too short")
         
-        # Run moderation (CPU-bound, use threadpool)
         result = await run_in_threadpool(moderate_content, request.text)
         
         logger.info(f"Moderation result: {result.decision} (risk: {result.risk_score:.2f})")
@@ -119,10 +91,6 @@ async def moderate_thesis(request: ModerationRequest):
     except Exception as e:
         logger.error(f"Moderation failed: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
-
-
-# ============ Manual Review ============
-
 @app.post("/api/manual-review", response_model=ManualReviewResponse)
 async def request_manual_review(request: ManualReviewRequest):
     """
@@ -144,12 +112,7 @@ async def request_manual_review(request: ManualReviewRequest):
     except Exception as e:
         logger.error(f"Manual review submission failed: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
-
-
-# ============ Thesis Analysis ============
-
 class AnalyzeResponse(BaseModel):
-    """Response from thesis analysis."""
     overall_score: float
     grade: str
     component_scores: dict
@@ -162,7 +125,6 @@ class AnalyzeResponse(BaseModel):
     weakness_report: dict
     consistency_issues: list
     bias_analysis: dict
-
 
 @app.post("/api/analyze", response_model=AnalyzeResponse)
 async def analyze_thesis(file: UploadFile = File(...)):
@@ -185,7 +147,6 @@ async def analyze_thesis(file: UploadFile = File(...)):
                 detail="Thesis text must be at least 50 characters"
             )
         
-        # Run analysis (heavy, use threadpool)
         analyzer = StrengthAnalyzer(verbose=True)
         result = await run_in_threadpool(analyzer.analyze, text)
         
@@ -197,17 +158,8 @@ async def analyze_thesis(file: UploadFile = File(...)):
     except Exception as e:
         logger.error(f"Analysis failed: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
-
-
-# ============ Warmup Endpoint ============
-
 @app.post("/api/warmup")
 async def warmup():
-    """
-    Preload ML models (manual trigger).
-    Note: Models are now auto-preloaded on startup, but this endpoint
-    can still be used to verify models are loaded.
-    """
     try:
         logger.info("Warming up models (manual trigger)...")
         
@@ -226,7 +178,6 @@ async def warmup():
     except Exception as e:
         logger.error(f"Warmup failed: {e}", exc_info=True)
         return {"status": "warmup failed", "error": str(e)}
-
 
 if __name__ == "__main__":
     import uvicorn

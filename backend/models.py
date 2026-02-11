@@ -1,10 +1,6 @@
-"""
-Data models for Thesis Strength Analysis results.
-"""
 from dataclasses import dataclass, field
 from typing import List, Dict, Optional
 from enum import Enum
-
 
 class SentenceType(Enum):
     FACT = "FACT"
@@ -13,12 +9,10 @@ class SentenceType(Enum):
     PROJECTION = "PROJECTION"
     CONTEXT = "CONTEXT"
 
-
 class SupportLevel(Enum):
     SUPPORTED = "SUPPORTED"
     PARTIAL = "PARTIAL"
     UNSUPPORTED = "UNSUPPORTED"
-
 
 class SentenceRole(Enum):
     FOUNDATION = "Foundation"
@@ -27,10 +21,8 @@ class SentenceRole(Enum):
     CONCLUSION = "Conclusion"
     TANGENT = "Tangent"
 
-
 @dataclass
 class AuditEntry:
-    """Entry for Fact vs Assumption audit table (Step 4)."""
     sentence_index: int
     statement: str
     classified_as: str
@@ -46,10 +38,8 @@ class AuditEntry:
             "issue": self.issue
         }
 
-
 @dataclass
 class LogicChainNode:
-    """Node in the logic chain visualization (Step 5)."""
     claim: str
     claim_type: str  # "main_claim", "supporting_point", "counter_argument"
     has_evidence: bool
@@ -65,10 +55,8 @@ class LogicChainNode:
             "confidence": round(self.confidence, 2)
         }
 
-
 @dataclass
 class WeaknessReport:
-    """Categorized weaknesses (Step 6 enhancement)."""
     vague_terms: List[str] = field(default_factory=list)
     weasel_words: List[str] = field(default_factory=list)
     unquantified_claims: List[Dict] = field(default_factory=list)
@@ -86,10 +74,8 @@ class WeaknessReport:
             "data": {"unsourced_statistics": self.unsourced_statistics, "outdated_info": self.outdated_info, "missing_context": self.missing_context}
         }
 
-
 @dataclass
 class ConsistencyIssue:
-    """Internal consistency issue (Rule 6)."""
     sentence_a_index: int
     sentence_b_index: int
     sentence_a_text: str
@@ -100,10 +86,8 @@ class ConsistencyIssue:
     def to_dict(self) -> Dict:
         return {"sentences": [self.sentence_a_index, self.sentence_b_index], "issue_type": self.issue_type, "explanation": self.explanation}
 
-
 @dataclass
 class BiasAnalysis:
-    """Bias detection result (Rule 8)."""
     is_biased: bool
     bias_score: float
     positive_ratio: float
@@ -114,10 +98,8 @@ class BiasAnalysis:
     def to_dict(self) -> Dict:
         return {"is_biased": self.is_biased, "bias_score": round(self.bias_score, 2), "sentiment": {"positive": round(self.positive_ratio, 1), "negative": round(self.negative_ratio, 1)}, "counter_arguments_present": self.counter_arguments_present, "flags": self.one_sided_flags}
 
-
 @dataclass
 class SentenceAnalysis:
-    """Analysis result for a single sentence."""
     index: int
     text: str
     sentence_type: SentenceType
@@ -139,10 +121,8 @@ class SentenceAnalysis:
             "entities": self.entities
         }
 
-
 @dataclass
 class ComponentScore:
-    """Score for one of the 5 main components."""
     name: str
     score: float  # 0-20
     max_score: float = 20.0
@@ -165,10 +145,8 @@ class ComponentScore:
             "notes": self.notes
         }
 
-
 @dataclass
 class MLFeatures:
-    """Features extracted by ML preprocessing."""
     sentence_count: int = 0
     entity_count: int = 0
     source_citation_count: int = 0
@@ -196,10 +174,8 @@ class MLFeatures:
             "companies": self.companies_mentioned
         }
 
-
 @dataclass
 class StrengthReport:
-    """Complete thesis strength analysis report."""
     # Overall
     overall_score: float  # 0-100
     grade: str  # A/B/C/D/F

@@ -1,7 +1,4 @@
-"""
-Moderator API - Content moderation wrapper for FastAPI.
-Provides gatekeeper functionality before thesis analysis.
-"""
+
 
 import os
 from typing import List, Optional
@@ -9,28 +6,21 @@ from pydantic import BaseModel
 from content_moderation import ContentModerator
 from content_moderation.config import LIGHTWEIGHT_CONFIG, DEFAULT_CONFIG
 
-
 # Use lightweight mode for free tier deployment (512MB RAM)
 USE_LIGHTWEIGHT = os.getenv("LIGHTWEIGHT_MODE", "true").lower() == "true"
 
 # Singleton moderator instance (lazy loaded)
 _moderator_instance = None
 
-
 class ModerationRequest(BaseModel):
-    """Request body for moderation endpoint."""
     text: str
 
-
 class ModerationIssue(BaseModel):
-    """Individual moderation issue with fix suggestion."""
     type: str
     found: str
     suggestion: str
 
-
 class ModerationResponse(BaseModel):
-    """Response from moderation endpoint."""
     decision: str  # PASS, FLAG, BLOCK
     risk_score: float
     is_finance_related: bool
@@ -38,30 +28,23 @@ class ModerationResponse(BaseModel):
     explanation: str
     can_proceed: bool
 
-
 class ManualReviewRequest(BaseModel):
-    """Request body for manual review submission."""
     text: str
     reason: str
     user_email: str
 
-
 class ManualReviewResponse(BaseModel):
-    """Response from manual review submission."""
     status: str
     review_id: str
     message: str
 
-
 def get_moderator() -> ContentModerator:
-    """Get or create the moderator singleton."""
     global _moderator_instance
     if _moderator_instance is None:
         config = LIGHTWEIGHT_CONFIG if USE_LIGHTWEIGHT else DEFAULT_CONFIG
         print(f"[ModeratorAPI] Initializing moderator (lightweight={USE_LIGHTWEIGHT})")
         _moderator_instance = ContentModerator(config=config)
     return _moderator_instance
-
 
 def _get_detailed_suggestion(issue_type: str, matched_text: str) -> str:
     """Generate specific, actionable suggestions based on issue type and matched content."""
@@ -86,7 +69,6 @@ def _get_detailed_suggestion(issue_type: str, matched_text: str) -> str:
     
     return f"Review and revise: \"{matched_text[:50]}...\""
 
-
 def _find_text_in_content(text: str, term: str) -> str:
     """
     Find the exact occurrence of a term in the original text.
@@ -101,7 +83,6 @@ def _find_text_in_content(text: str, term: str) -> str:
         pattern = r'\b' + re.escape(term_lower) + r'\w*\b'
         match = re.search(pattern, text_lower)
         if match:
-            # Return the word as it appears in original text (preserves case)
             return text[match.start():match.end()]
     else:
         # For phrases, find exact position
@@ -110,7 +91,6 @@ def _find_text_in_content(text: str, term: str) -> str:
             return text[pos:pos + len(term)]
     
     return term
-
 
 def moderate_content(text: str) -> ModerationResponse:
     """
@@ -178,7 +158,6 @@ def moderate_content(text: str) -> ModerationResponse:
         can_proceed=can_proceed
     )
 
-
 def _find_flagged_toxic_word(text: str, category: str) -> str:
     """
     Find the actual toxic word in the text based on category.
@@ -190,7 +169,6 @@ def _find_flagged_toxic_word(text: str, category: str) -> str:
     
     text_lower = text.lower()
     
-    # Load toxic terms from JSON
     data_path = Path(__file__).parent / "content_moderation" / "data" / "toxic_terms.json"
     
     try:
@@ -226,7 +204,6 @@ def _find_flagged_toxic_word(text: str, category: str) -> str:
     if json_key:
         terms_to_check = toxic_data.get(json_key, [])
     else:
-        # Check ALL categories to find the match
         terms_to_check = []
         for key, terms in toxic_data.items():
             if isinstance(terms, list):
@@ -241,7 +218,6 @@ def _find_flagged_toxic_word(text: str, category: str) -> str:
             pattern = r'\b' + re.escape(term_lower) + r'\w*\b'
             match = re.search(pattern, text_lower)
             if match:
-                # Return the actual matched text from original (preserves case)
                 return text[match.start():match.end()]
         else:
             # For phrases, use substring match
@@ -251,7 +227,6 @@ def _find_flagged_toxic_word(text: str, category: str) -> str:
     
     # If nothing found, return cleaned category name
     return category.replace("_", " ")
-
 
 def submit_manual_review(request: ManualReviewRequest) -> ManualReviewResponse:
     """Submit content for manual review. Logs the request and returns a tracking ID."""

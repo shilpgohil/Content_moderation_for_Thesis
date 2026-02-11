@@ -1,13 +1,11 @@
-"""Rule-based scam detection engine."""
+
 
 import json
 import re
 from pathlib import Path
 from typing import List, Dict, Set
 
-
 class RuleEngine:
-    """Pattern-based scam and fraud detection."""
     
     def __init__(self):
         self._patterns: Dict = {}
@@ -16,13 +14,11 @@ class RuleEngine:
         self._load_patterns()
     
     def _load_patterns(self):
-        """Load scam patterns from JSON file."""
         data_path = Path(__file__).parent.parent / "data" / "scam_patterns.json"
         
         with open(data_path, 'r', encoding='utf-8') as f:
             self._patterns = json.load(f)
         
-        # Build whitelist set
         for term in self._patterns.get("whitelist_contexts", []):
             self._whitelist.add(term.lower())
         
@@ -70,7 +66,6 @@ class RuleEngine:
             "context_reduction": 0.0
         }
         
-        # Check for whitelist context first
         context_reduction = self._check_context(text_lower)
         result["context_reduction"] = context_reduction
         result["has_whitelist_context"] = context_reduction > 0
@@ -244,7 +239,6 @@ class RuleEngine:
         # Strong warning context - use whitelist from JSON
         # These phrases almost completely negate scam score
         
-        # Check loaded whitelist first
         for phrase in self._whitelist:
             if phrase in text:
                 return 0.9

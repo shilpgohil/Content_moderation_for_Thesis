@@ -1,6 +1,4 @@
-"""
-LLM prompt templates for thesis strength analysis.
-"""
+
 
 SYSTEM_PROMPT = """You are a professional investment thesis analyzer. Your job is to forensically examine investment theses and provide detailed scoring and analysis.
 
@@ -74,9 +72,7 @@ Provide:
         "improvement_priorities": ["<priority 1>", "<priority 2>", "<priority 3>"]
     }}
 }}
-"""
 
-SENTENCE_BATCH_PROMPT = """
 ## AMBIGUOUS SENTENCES TO CLASSIFY
 
 The following sentences could not be confidently classified by ML. Please classify each as:

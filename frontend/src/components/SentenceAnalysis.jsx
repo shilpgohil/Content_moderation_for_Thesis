@@ -36,7 +36,7 @@ export default function SentenceAnalysis({ sentences, quickStats }) {
 
     return (
         <div>
-            {/* Stats bar */}
+            {}
             <div className="grid grid-cols-2 sm:grid-cols-5 gap-4 mb-8">
                 <StatBadge label="Total" value={quickStats.total_sentences} />
                 <StatBadge label="Facts" value={quickStats.facts} color="blue" />
@@ -45,7 +45,7 @@ export default function SentenceAnalysis({ sentences, quickStats }) {
                 <StatBadge label="Projections" value={quickStats.projections} color="cyan" />
             </div>
 
-            {/* Filter */}
+            {}
             <div className="flex flex-wrap gap-2 mb-6">
                 {['ALL', 'FACT', 'OPINION', 'ASSUMPTION', 'PROJECTION', 'CONTEXT'].map((type) => (
                     <button
@@ -61,7 +61,7 @@ export default function SentenceAnalysis({ sentences, quickStats }) {
                 ))}
             </div>
 
-            {/* Sentence list */}
+            {}
             <div className="space-y-3">
                 {filteredSentences.map((sentence, i) => {
                     const colors = typeColors[sentence.type] || typeColors.CONTEXT;
@@ -81,17 +81,17 @@ export default function SentenceAnalysis({ sentences, quickStats }) {
                                 onClick={() => toggleExpanded(sentence.index)}
                                 className="w-full p-4 flex items-start gap-4 text-left hover:bg-dark-card/50 transition-colors"
                             >
-                                {/* Index */}
+                                {}
                                 <span className="flex-shrink-0 w-8 h-8 rounded-lg bg-dark-border flex items-center justify-center text-sm font-medium">
                                     {sentence.index}
                                 </span>
 
-                                {/* Content */}
+                                {}
                                 <div className="flex-1 min-w-0">
                                     <p className="text-gray-200 line-clamp-2">{sentence.text}</p>
                                 </div>
 
-                                {/* Badges */}
+                                {}
                                 <div className="flex items-center gap-2 flex-shrink-0">
                                     <span className={`px-3 py-1 rounded-full text-xs font-medium ${colors.bg} ${colors.text}`}>
                                         {sentence.type}
@@ -103,7 +103,7 @@ export default function SentenceAnalysis({ sentences, quickStats }) {
                                 </div>
                             </button>
 
-                            {/* Expanded details */}
+                            {}
                             <AnimatePresence>
                                 {isExpanded && (
                                     <motion.div

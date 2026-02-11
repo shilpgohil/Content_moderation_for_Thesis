@@ -1,13 +1,11 @@
-"""Finance domain relevance checker."""
+
 
 import json
 import re
 from pathlib import Path
 from typing import Set, Dict
 
-
 class DomainChecker:
-    """Checks if content is related to finance domain."""
     
     def __init__(self):
         self._finance_terms: Set[str] = set()
@@ -19,13 +17,11 @@ class DomainChecker:
         self._load_vocabulary()
     
     def _load_vocabulary(self):
-        """Load finance vocabulary from JSON file."""
         data_path = Path(__file__).parent.parent / "data" / "finance_vocabulary.json"
         
         with open(data_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
         
-        # Load categories
         for category, terms in data["categories"].items():
             if category == "negative_topics":
                 for term in terms:
@@ -54,7 +50,6 @@ class DomainChecker:
                         if term_lower not in self.AMBIGUOUS_TERMS:
                             self._strong_finance_terms.add(term_lower)
         
-        # Load high priority terms
         for term in data.get("high_priority_terms", []):
             self._high_priority_terms.add(term.lower())
     
@@ -103,7 +98,6 @@ class DomainChecker:
         high_priority_matches = 0
         strong_signal_found = False
         
-        # Check single-word terms using word boundaries
         for term in self._finance_terms:
             if self._match_term(term, text, text_lower):
                 matched.append(term)
@@ -112,12 +106,10 @@ class DomainChecker:
                 if term in self._strong_finance_terms:
                     strong_signal_found = True
         
-        # Check negative terms
         for term in self._negative_terms:
             if self._match_term(term, text, text_lower):
                 negative_matches.append(term)
         
-        # Calculate score
         meaningful_words = len([w for w in words_list if len(w) > 2])
         if meaningful_words == 0:
             return {"score": 0.0, "is_finance": False, "matched_terms": [], "negative_terms_found": []}
@@ -175,7 +167,6 @@ class DomainChecker:
                 if len(sent) < 6: 
                     continue
                 
-                # Check if sentence has any finance context
                 sent_text = sent.text.lower()
                 has_finance_context = False
                 
@@ -199,7 +190,6 @@ class DomainChecker:
                 # Strong heuristic: Talking about specific People/Places/Orgs without ANY finance context
                 # is a strong indicator of off-topic drift (e.g., Politics, Movies, Sports)
                 if topic_entities:
-                    # Check if entities are not actually negative terms found earlier 
                     # (to avoid double punishing known negatives)
                     new_drift = True
                     for ent in topic_entities:

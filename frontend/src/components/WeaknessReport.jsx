@@ -13,7 +13,7 @@ export default function WeaknessReport({ report }) {
 
     return (
         <div className="grid md:grid-cols-3 gap-6">
-            {/* Language Weaknesses */}
+            {}
             <WeaknessCard
                 icon={<Type className="w-5 h-5" />}
                 title="Language Weaknesses"
@@ -38,7 +38,7 @@ export default function WeaknessReport({ report }) {
                     )}
             </WeaknessCard>
 
-            {/* Logical Weaknesses */}
+            {}
             <WeaknessCard
                 icon={<GitBranch className="w-5 h-5" />}
                 title="Logical Weaknesses"
@@ -70,7 +70,7 @@ export default function WeaknessReport({ report }) {
                     )}
             </WeaknessCard>
 
-            {/* Data Weaknesses */}
+            {}
             <WeaknessCard
                 icon={<Database className="w-5 h-5" />}
                 title="Data Weaknesses"

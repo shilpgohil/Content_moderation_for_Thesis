@@ -1,11 +1,6 @@
 import { motion } from 'framer-motion';
 import { Shield, CheckCircle, Loader2 } from 'lucide-react';
 
-/**
- * ModerationLoadingState - Shows while content moderation is running.
- * Distinct visual design from thesis analysis loading to avoid confusion.
- */
-
 const moderationSteps = [
     { id: 1, label: 'Scanning for spam patterns' },
     { id: 2, label: 'Checking content toxicity' },
@@ -22,9 +17,9 @@ export default function ModerationLoadingState() {
                 transition={{ duration: 0.5 }}
                 className="text-center"
             >
-                {/* Security Shield Animation */}
+                {}
                 <div className="relative w-32 h-32 mx-auto mb-8">
-                    {/* Outer pulsing ring */}
+                    {}
                     <motion.div
                         className="absolute inset-0"
                         animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.1, 0.3] }}
@@ -33,7 +28,7 @@ export default function ModerationLoadingState() {
                         <div className="absolute inset-0 rounded-full bg-green-500/20" />
                     </motion.div>
 
-                    {/* Scanning ring */}
+                    {}
                     <motion.div
                         className="absolute inset-2"
                         animate={{ rotate: 360 }}
@@ -43,7 +38,7 @@ export default function ModerationLoadingState() {
                         <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-green-400" />
                     </motion.div>
 
-                    {/* Inner shield */}
+                    {}
                     <motion.div
                         className="absolute inset-0 flex items-center justify-center"
                         animate={{ scale: [1, 1.05, 1] }}
@@ -60,7 +55,7 @@ export default function ModerationLoadingState() {
                     Verifying your content meets our guidelines...
                 </p>
 
-                {/* Moderation Steps */}
+                {}
                 <div className="max-w-sm mx-auto">
                     {moderationSteps.map((step, i) => (
                         <motion.div

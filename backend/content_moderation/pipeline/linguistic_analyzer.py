@@ -1,4 +1,4 @@
-"""Linguistic analysis using SpaCy for deep text understanding."""
+
 
 import re
 import logging
@@ -15,9 +15,7 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
-
 class LinguisticAnalyzer:
-    """Provides deep linguistic analysis including NER, negation, and dependencies."""
     
     def __init__(self, model_name: str = "en_core_web_sm"):
         self.model_name = model_name
@@ -29,7 +27,6 @@ class LinguisticAnalyzer:
             self._disabled = True
 
     def _load_model(self):
-        """Lazy load the SpaCy model from shared manager."""
         if self._nlp is None and not self._disabled:
             try:
                 logger.info(f"Loading SpaCy model: {self.model_name}")
@@ -87,10 +84,6 @@ class LinguisticAnalyzer:
             return self._get_empty_result()
 
     def _detect_negation(self, doc) -> Dict[int, str]:
-        """
-        Map token indices to the negation word affecting them.
-        Example: "not a fraud" -> {index_of_fraud: "not"}
-        """
         negation_map = {}
         for token in doc:
             if token.dep_ == "neg":
@@ -106,7 +99,6 @@ class LinguisticAnalyzer:
         return negation_map
 
     def _extract_dependencies(self, doc) -> List[Dict]:
-        """Extract simplified Subject-Verb-Object triples."""
         triples = []
         for token in doc:
             if token.pos_ == "VERB":
@@ -125,7 +117,6 @@ class LinguisticAnalyzer:
         return triples
 
     def _get_empty_result(self) -> Dict:
-        """Return a safe empty result structure."""
         return {
             "doc": None,
             "entities": [],

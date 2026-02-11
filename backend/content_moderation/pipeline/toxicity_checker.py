@@ -1,13 +1,11 @@
-"""Toxicity and inappropriate content detection."""
+
 
 import json
 import re
 from pathlib import Path
 from typing import List, Set
 
-
 class ToxicityChecker:
-    """Detects profanity, hate speech, personal attacks, and defamation."""
     
     def __init__(self):
         self._severe_profanity: Set[str] = set()
@@ -24,17 +22,14 @@ class ToxicityChecker:
         self._load_whitelist()
     
     def _load_patterns(self):
-        """Load toxicity patterns from JSON file."""
         data_path = Path(__file__).parent.parent / "data" / "toxic_terms.json"
         
         with open(data_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
         
-        # Load severe profanity (BLOCK-worthy)
         for term in data.get("severe_profanity", []):
             self._severe_profanity.add(term.lower())
         
-        # Load mild profanity (FLAG-worthy)
         for term in data.get("mild_profanity", []):
             self._mild_profanity.add(term.lower())
         
@@ -56,7 +51,6 @@ class ToxicityChecker:
         for term in data.get("doxxing_patterns", []):
             self._doxxing_patterns.add(term.lower())
         
-        # Load defamation patterns
         for term in data.get("defamation_patterns", []):
             self._defamation_patterns.add(term.lower())
         
@@ -190,7 +184,6 @@ class ToxicityChecker:
         result["score"] += score
     
     def _load_whitelist(self):
-        """Load whitelist contexts from shared JSON configuration."""
         data_path = Path(__file__).parent.parent / "data" / "scam_patterns.json"
         
         try:
@@ -219,7 +212,6 @@ class ToxicityChecker:
             "matched": []
         }
         
-        # Check if whitelist context is present (news/educational content)
         # NOTE: This only affects scam-related checks, NOT profanity/hate speech
         is_whitelisted = False
         for context in self.WHITELIST_CONTEXTS:
@@ -228,7 +220,6 @@ class ToxicityChecker:
                 is_whitelisted = True
                 break
         
-        # Check standard toxicity categories
         # Config format: (pattern_set, category_name, toxicity_score)
         checks = [
             (self._severe_profanity, "severe_profanity", 0.6),
@@ -243,10 +234,8 @@ class ToxicityChecker:
         for patterns, category, score in checks:
             self._check_pattern_set(text_lower, patterns, category, score, result)
         
-        # Check defamation (entity + attack pattern)
         self._check_defamation(text_lower, result, linguistic_result)
         
-        # Check hate speech patterns (regex)
         for pattern in self._hate_patterns:
             if pattern.search(text):
                 if "hate_speech" not in result["categories"]:
@@ -254,7 +243,6 @@ class ToxicityChecker:
                 result["score"] += 0.6
                 break
         
-        # Check spam indicators
         spam_count = sum(1 for ind in self._spam_indicators if ind in text_lower)
         if spam_count >= 2:
             result["categories"].append("spam")

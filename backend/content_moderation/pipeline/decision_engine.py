@@ -1,11 +1,9 @@
-"""Decision engine for final moderation verdict."""
+
 
 from typing import Dict, Optional
 from ..config import ModerationConfig, DEFAULT_CONFIG
 
-
 class DecisionEngine:
-    """Aggregates signals and makes final moderation decision."""
     
     DECISION_BLOCK = "BLOCK"
     DECISION_FLAG = "FLAG"
@@ -36,7 +34,6 @@ class DecisionEngine:
             "explanation": ""
         }
         
-        # Check finance relevance first
         finance_score = domain_result.get("score", 0)
         is_finance = domain_result.get("is_finance", False)
         
@@ -51,7 +48,6 @@ class DecisionEngine:
         if finance_score < self.config.finance_pass_threshold:
             result["flags"].append("low_finance_relevance")
         
-        # Calculate risk score
         risk_score = self._calculate_risk_score(
             scam_result, toxicity_result, fuzzy_result, semantic_result
         )
@@ -138,11 +134,9 @@ class DecisionEngine:
         flags = []
         count = 0
         if result.get("is_toxic"):
-            # Get both categories and matched terms
             categories = result.get("categories", [])
             matched_terms = result.get("matched", [])
             
-            # Create a flag for EACH matched term (not just category)
             for i, term in enumerate(matched_terms):
                 # Try to pair with a category if available
                 category = categories[i] if i < len(categories) else categories[0] if categories else "toxicity"

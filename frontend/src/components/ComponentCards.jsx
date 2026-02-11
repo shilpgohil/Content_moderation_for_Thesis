@@ -34,7 +34,7 @@ export default function ComponentCards({ scores }) {
                         transition={{ delay: index * 0.1 }}
                         className="p-5 rounded-xl gradient-card border border-dark-border hover:border-primary-500/30 transition-colors"
                     >
-                        {/* Header */}
+                        {}
                         <div className="flex items-start justify-between mb-4">
                             <div className={`w-10 h-10 rounded-lg ${colors.bg} flex items-center justify-center`}>
                                 <Icon className={`w-5 h-5 ${colors.text}`} />
@@ -44,10 +44,10 @@ export default function ComponentCards({ scores }) {
                             </span>
                         </div>
 
-                        {/* Name */}
+                        {}
                         <h3 className="font-medium text-white mb-3">{data.name}</h3>
 
-                        {/* Progress bar */}
+                        {}
                         <div className="h-2 bg-dark-border rounded-full overflow-hidden">
                             <motion.div
                                 className={`h-full ${colors.bar} rounded-full`}
@@ -57,7 +57,7 @@ export default function ComponentCards({ scores }) {
                             />
                         </div>
 
-                        {/* Breakdown */}
+                        {}
                         {data.breakdown && (
                             <div className="mt-4 space-y-1">
                                 {Object.entries(data.breakdown).map(([bKey, bValue]) => (
