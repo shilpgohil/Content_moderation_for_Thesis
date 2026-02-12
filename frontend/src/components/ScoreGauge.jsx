@@ -28,10 +28,10 @@ export default function ScoreGauge({ score, grade }) {
 
     return (
         <div className="flex flex-col items-center">
-            {}
+            {/* Gauge container */}
             <div className="relative w-[180px] h-[180px]">
                 <svg width="180" height="180" className="transform -rotate-90">
-                    {}
+                    {/* Background circle */}
                     <circle
                         cx="90"
                         cy="90"
@@ -41,7 +41,7 @@ export default function ScoreGauge({ score, grade }) {
                         fill="none"
                     />
 
-                    {}
+                    {/* Animated progress circle */}
                     <motion.circle
                         cx="90"
                         cy="90"
@@ -59,7 +59,7 @@ export default function ScoreGauge({ score, grade }) {
                     />
                 </svg>
 
-                {}
+                {/* Center content - positioned inside the circle */}
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
                     <motion.span
                         className="text-4xl font-bold leading-none"
@@ -74,7 +74,7 @@ export default function ScoreGauge({ score, grade }) {
                 </div>
             </div>
 
-            {}
+            {/* Grade badge - separated below the gauge */}
             <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}

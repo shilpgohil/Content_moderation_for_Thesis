@@ -4,7 +4,7 @@ import { FileText, Atom, BarChart3, Sparkles } from 'lucide-react';
 export default function Hero() {
     return (
         <header className="relative py-16 px-4 overflow-hidden">
-            {}
+            {/* Animated background elements */}
             <div className="absolute inset-0 overflow-hidden">
                 <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary-500/10 rounded-full blur-3xl" />
                 <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl" />
@@ -16,13 +16,13 @@ export default function Hero() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6 }}
                 >
-                    {}
+                    {/* Badge */}
                     <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-500/10 border border-primary-500/20 mb-8">
                         <Atom className="w-4 h-4 text-primary-400" />
                         <span className="text-sm text-primary-300">AI Powered Thesis Analyzer</span>
                     </div>
 
-                    {}
+                    {/* Main title */}
                     <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white via-primary-200 to-primary-400 bg-clip-text text-transparent">
                         Thesis Strength Analyzer
                     </h1>
@@ -31,7 +31,7 @@ export default function Hero() {
                         Validate your investment thesis with AI powered analysis
                     </p>
 
-                    {}
+                    {/* Feature cards */}
                     <div className="grid md:grid-cols-3 gap-6 mt-12">
                         <FeatureCard
                             icon={<FileText className="w-6 h-6" />}

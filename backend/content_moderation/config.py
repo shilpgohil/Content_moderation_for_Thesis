@@ -1,9 +1,12 @@
+"""Configuration for content moderation thresholds and weights."""
 
 from dataclasses import dataclass, field
 from typing import Dict
 
+
 @dataclass
 class ModerationConfig:
+    """Centralized configuration for moderation thresholds."""
     
     block_threshold: float = 0.5  # Lower = stricter
     flag_threshold: float = 0.2   # Lower = more flagging
@@ -41,6 +44,7 @@ class ModerationConfig:
     semantic_threshold: float = 0.72  # Lowered slightly to catch borderline detection
     semantic_weight: float = 0.6       # Boosted weight to support quadratic scaling
     enable_semantic: bool = True
+
 
 # Default configuration instance
 DEFAULT_CONFIG = ModerationConfig()

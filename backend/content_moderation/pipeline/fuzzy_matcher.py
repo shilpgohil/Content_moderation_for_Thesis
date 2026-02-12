@@ -1,9 +1,11 @@
-
+"""Fuzzy matching for detecting misspelled scam phrases."""
 
 from typing import Dict, List
 from rapidfuzz import fuzz, process
 
+
 class FuzzyMatcher:
+    """Detects misspelled scam phrases using fuzzy string matching."""
     
     # Minimum similarity score to consider a match (0-100)
     DEFAULT_THRESHOLD = 75
@@ -16,6 +18,7 @@ class FuzzyMatcher:
         self._load_whitelist()
     
     def _load_scam_phrases(self) -> List[str]:
+        """Load scam phrases - only multi-word distinctive phrases."""
         return [
             # High severity - distinctive multi-word phrases
             "guaranteed returns",
@@ -50,6 +53,7 @@ class FuzzyMatcher:
             "send to my account",
             "pay registration fee",
             "pay joining fee",
+            # Additional phrases for fuzzy matching
             "double yor moni",
             "doubel your money",
             "garanteed returns",
@@ -73,6 +77,7 @@ class FuzzyMatcher:
     WHITELIST_CONTEXTS = []
 
     def _load_whitelist(self):
+        """Load whitelist contexts from shared JSON configuration."""
         import json
         from pathlib import Path
         try:
@@ -136,6 +141,7 @@ class FuzzyMatcher:
             if result and result[1] >= self.threshold:
                 matched_phrase, score, _ = result
                 
+                # Additional validation: lengths should be similar
                 len_ratio = len(ngram) / len(matched_phrase)
                 if len_ratio < 0.7 or len_ratio > 1.5:
                     continue

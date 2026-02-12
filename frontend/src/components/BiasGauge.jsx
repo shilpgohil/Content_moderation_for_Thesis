@@ -27,7 +27,7 @@ export default function BiasGauge({ bias }) {
             </div>
 
             <div className="grid sm:grid-cols-2 gap-6">
-                {}
+                {/* Sentiment bar */}
                 <div>
                     <p className="text-sm text-gray-400 mb-3">Sentiment Distribution</p>
                     <div className="flex items-center gap-2 mb-2">
@@ -54,7 +54,7 @@ export default function BiasGauge({ bias }) {
                     </div>
                 </div>
 
-                {}
+                {/* Stats */}
                 <div className="space-y-3">
                     <div className="flex items-center justify-between">
                         <span className="text-sm text-gray-400">Bias Score</span>
@@ -73,7 +73,7 @@ export default function BiasGauge({ bias }) {
                 </div>
             </div>
 
-            {}
+            {/* Flags */}
             {flags && flags.length > 0 && (
                 <div className="mt-6 pt-4 border-t border-dark-border">
                     <p className="text-sm text-gray-400 mb-2">Flags:</p>

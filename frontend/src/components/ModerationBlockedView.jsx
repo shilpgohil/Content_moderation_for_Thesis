@@ -2,6 +2,10 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ShieldX, AlertTriangle, Edit3, Send, X, ChevronDown } from 'lucide-react';
 
+/**
+ * ModerationBlockedView - Displays when content is blocked or flagged.
+ * Shows detailed issues with suggestions and provides Edit & Request Review options.
+ */
 export default function ModerationBlockedView({ moderationResult, originalText, onEdit, onRetry }) {
     const [showReviewModal, setShowReviewModal] = useState(false);
     const [reviewEmail, setReviewEmail] = useState('');
@@ -57,7 +61,7 @@ export default function ModerationBlockedView({ moderationResult, originalText, 
                 animate={{ opacity: 1, y: 0 }}
                 className="max-w-2xl mx-auto"
             >
-                {}
+                {/* Header */}
                 <div className="text-center mb-8">
                     <div className={`inline-flex items-center justify-center w-20 h-20 rounded-full mb-6 ${isBlocked ? 'bg-red-500/20' : 'bg-yellow-500/20'
                         }`}>
@@ -81,7 +85,7 @@ export default function ModerationBlockedView({ moderationResult, originalText, 
                     </p>
                 </div>
 
-                {}
+                {/* Risk Score */}
                 <div className="flex justify-center mb-8">
                     <div className={`px-6 py-3 rounded-full border ${isBlocked
                         ? 'border-red-500/30 bg-red-500/10'
@@ -95,7 +99,7 @@ export default function ModerationBlockedView({ moderationResult, originalText, 
                     </div>
                 </div>
 
-                {}
+                {/* Issues List */}
                 <div className="space-y-3 mb-8">
                     <h2 className="text-lg font-semibold text-white mb-4">Issues Found</h2>
 
@@ -184,7 +188,7 @@ export default function ModerationBlockedView({ moderationResult, originalText, 
                     )}
                 </div>
 
-                {}
+                {/* Action Buttons */}
                 <div className="flex flex-col sm:flex-row gap-4">
                     <motion.button
                         onClick={onEdit}
@@ -207,7 +211,7 @@ export default function ModerationBlockedView({ moderationResult, originalText, 
                     </motion.button>
                 </div>
 
-                {}
+                {/* Manual Review Modal */}
                 {showReviewModal && (
                     <motion.div
                         initial={{ opacity: 0 }}

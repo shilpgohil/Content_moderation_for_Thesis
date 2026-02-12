@@ -8,7 +8,7 @@ export default function Synthesis({ synthesis }) {
 
     return (
         <div className="grid md:grid-cols-2 gap-6">
-            {}
+            {/* Strengths */}
             <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -32,7 +32,7 @@ export default function Synthesis({ synthesis }) {
                 </ul>
             </motion.div>
 
-            {}
+            {/* Weaknesses */}
             <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -56,7 +56,7 @@ export default function Synthesis({ synthesis }) {
                 </ul>
             </motion.div>
 
-            {}
+            {/* Missing Elements */}
             {synthesis.missing_elements?.length > 0 && (
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -81,7 +81,7 @@ export default function Synthesis({ synthesis }) {
                 </motion.div>
             )}
 
-            {}
+            {/* Improvement Priorities */}
             {synthesis.improvement_priorities?.length > 0 && (
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}

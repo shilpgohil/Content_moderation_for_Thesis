@@ -1,11 +1,13 @@
-
+"""Semantic similarity checking using sentence transformers."""
 
 import json
 from pathlib import Path
 from typing import Dict, List, Optional
 import numpy as np
 
+
 class SemanticChecker:
+    """Detects scam content using semantic similarity with pre-computed embeddings."""
     
     # Similarity threshold for flagging content
     DEFAULT_THRESHOLD = 0.75
@@ -29,12 +31,14 @@ class SemanticChecker:
         self._load_whitelist()
     
     def _load_model(self):
+        """Lazy load the sentence transformer model from shared manager."""
         if self._model is None:
             from shared.model_manager import get_sentence_transformer
             self._model = get_sentence_transformer()
         return self._model
     
     def _load_templates(self) -> List[Dict]:
+        """Load scam templates from JSON file or use defaults."""
         if self._templates is None:
             data_path = Path(__file__).parent.parent / "data" / "scam_templates.json"
             
@@ -49,6 +53,7 @@ class SemanticChecker:
         return self._templates
     
     def _load_whitelist(self):
+        """Load whitelist contexts from shared JSON configuration."""
         data_path = Path(__file__).parent.parent / "data" / "scam_patterns.json"
         
         try:
@@ -60,6 +65,7 @@ class SemanticChecker:
             self.WHITELIST_CONTEXTS = []
 
     def _get_default_templates(self) -> List[Dict]:
+        """Default scam templates for semantic matching."""
         return [
             # Guaranteed returns scams
             {"text": "Join my group for guaranteed returns every month", "severity": "high"},
@@ -114,6 +120,7 @@ class SemanticChecker:
         ]
     
     def _compute_embeddings(self):
+        """Compute embeddings for all templates."""
         if self._template_embeddings is None:
             model = self._load_model()
             templates = self._load_templates()
@@ -174,6 +181,7 @@ class SemanticChecker:
             # Sort by similarity
             matches.sort(key=lambda x: x["similarity"], reverse=True)
             
+            # Calculate score based on best match
             if max_similarity >= self.threshold:
                 # Scale score: threshold->1.0 maps to 0.5->1.0
                 score = 0.5 + (max_similarity - self.threshold) / (1 - self.threshold) * 0.5

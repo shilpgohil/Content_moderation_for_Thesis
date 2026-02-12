@@ -1,10 +1,12 @@
-
+"""Text preprocessing utilities."""
 
 import re
 import unicodedata
 from typing import Tuple, List
 
+
 class TextPreprocessor:
+    """Cleans and normalizes text before analysis."""
     
     # L33t speak mappings
     LEET_MAP = {
@@ -59,6 +61,7 @@ class TextPreprocessor:
         result = []
         
         for word in words:
+            # Check if word is a pure number or currency amount
             # Matches: 100, 100%, $100, 100$, ₹100, 100,000, $1,000
             if re.match(r'^[$₹]?[\d,]+[%$]?$', word):
                 result.append(word)

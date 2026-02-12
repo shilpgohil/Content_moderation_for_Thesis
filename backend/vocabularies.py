@@ -1,4 +1,6 @@
-
+"""
+Investment-specific vocabulary banks for feature extraction.
+"""
 
 # Evidence markers - indicates supported claims
 EVIDENCE_MARKERS = {
@@ -122,7 +124,11 @@ THESIS_STRUCTURE_MARKERS = {
     "risk_section": ["risk", "what could break", "downside", "bear case"],
     "action_section": ["how", "action", "strategy", "execution"]
 }
+
+# ============================================
 # EXPANDED DOMAIN VOCABULARY (ML Improvement #2)
+# ============================================
+
 # Financial statement references - indicates factual grounding
 FINANCIAL_STATEMENT_REFS = [
     "10-K", "10-Q", "annual report", "quarterly report", "SEC filing",
@@ -159,7 +165,11 @@ CAUSAL_CONNECTORS = {
     "contrast": ["however", "but", "although", "despite", "nevertheless", "yet"],
     "additive": ["moreover", "furthermore", "additionally", "also", "in addition"]
 }
+
+# ============================================
 # CERTAINTY ANALYSIS (ML Improvement #3)
+# ============================================
+
 # Categorized certainty levels - replaces simple CERTAINTY_WORDS
 CERTAINTY_LEVELS = {
     "high": [

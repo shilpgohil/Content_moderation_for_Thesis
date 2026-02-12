@@ -30,18 +30,22 @@ export default function Dashboard({ result, onReset }) {
         const margin = 20;
         const contentWidth = pageWidth - 2 * margin;
 
+        // Color Constants
         const themeColor = [128, 0, 0]; // Maroon / Deep Red
         const subTitleColor = [60, 60, 60]; // Dark Gray for subtitles
         const lightBoxColor = [250, 245, 245]; // Very light warm background
         const dividerColor = [160, 60, 60];
 
+        // Add off-white background to each page
         const addBackground = () => {
             doc.setFillColor(252, 251, 248); // Off-white / cream color
             doc.rect(0, 0, pageWidth, pageHeight, 'F');
         };
 
+        // Add page with background
         addBackground();
 
+        // Helper functions
         const checkNewPage = (neededSpace = 20) => {
             if (y > pageHeight - neededSpace) {
                 doc.addPage();
@@ -116,6 +120,9 @@ export default function Dashboard({ result, onReset }) {
             doc.line(margin, y - 2, margin + 40, y - 2);
             y += 4;
         };
+
+        // ========== HEADER ==========
+        // Add a header bar
         doc.setFillColor(themeColor[0], themeColor[1], themeColor[2]);
         doc.rect(0, 0, pageWidth, 12, 'F');
 
@@ -123,6 +130,8 @@ export default function Dashboard({ result, onReset }) {
         addTitle('THESIS STRENGTH ANALYSIS', 20);
         addTitle('COMPREHENSIVE REPORT', 14);
         y += 5;
+
+        // ========== EXECUTIVE SUMMARY ==========
         doc.setFillColor(lightBoxColor[0], lightBoxColor[1], lightBoxColor[2]);
         doc.setDrawColor(themeColor[0], themeColor[1], themeColor[2]);
         // roundedRect with very thin border
@@ -140,6 +149,8 @@ export default function Dashboard({ result, onReset }) {
         y += 20;
 
         addDivider();
+
+        // ========== COMPONENT SCORES ==========
         addSection('COMPONENT SCORES');
 
         const scoreData = Object.entries(result.component_scores || {}).map(([key, comp]) => [
@@ -161,6 +172,8 @@ export default function Dashboard({ result, onReset }) {
         y = doc.lastAutoTable.finalY + 10;
 
         addDivider();
+
+        // ========== QUICK STATISTICS ==========
         addSection('ANALYSIS STATISTICS');
         const stats = result.quick_stats;
         if (stats) {
@@ -175,6 +188,8 @@ export default function Dashboard({ result, onReset }) {
         }
 
         addDivider();
+
+        // ========== SYNTHESIS ==========
         addSection('KEY STRENGTHS');
         (result.synthesis?.top_strengths || []).forEach((s, i) => {
             addBullet(`${s}`);
@@ -203,6 +218,8 @@ export default function Dashboard({ result, onReset }) {
         }
 
         addDivider();
+
+        // ========== BIAS ANALYSIS ==========
         addSection('BIAS ANALYSIS');
         const bias = result.bias_analysis;
         if (bias) {
@@ -215,6 +232,8 @@ export default function Dashboard({ result, onReset }) {
                 bias.flags.forEach(f => addBullet(f));
             }
         }
+
+        // ========== FACT VS ASSUMPTION AUDIT ==========
         if (result.audit_table?.length > 0) {
             addDivider();
             addSection('FACT VS ASSUMPTION AUDIT');
@@ -248,6 +267,8 @@ export default function Dashboard({ result, onReset }) {
 
             y = doc.lastAutoTable.finalY + 10;
         }
+
+        // ========== FOOTER ==========
         const totalPages = doc.internal.getNumberOfPages();
         for (let i = 1; i <= totalPages; i++) {
             doc.setPage(i);
@@ -281,7 +302,7 @@ export default function Dashboard({ result, onReset }) {
 
     return (
         <div className="min-h-screen">
-            {}
+            {/* Header */}
             <header className="sticky top-0 z-50 bg-dark-bg/80 backdrop-blur-lg border-b border-dark-border">
                 <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
                     <button
@@ -304,9 +325,9 @@ export default function Dashboard({ result, onReset }) {
                 </div>
             </header>
 
-            {}
+            {/* Main content */}
             <main className="max-w-7xl mx-auto px-4 py-8">
-                {}
+                {/* Score header */}
                 <div className="grid lg:grid-cols-3 gap-8 mb-12">
                     <div className="lg:col-span-1 flex justify-center">
                         <ScoreGauge
@@ -319,7 +340,7 @@ export default function Dashboard({ result, onReset }) {
                     </div>
                 </div>
 
-                {}
+                {/* Tabs */}
                 <div className="border-b border-dark-border mb-8">
                     <nav className="flex gap-8">
                         {tabs.map((tab) => (
@@ -335,7 +356,7 @@ export default function Dashboard({ result, onReset }) {
                     </nav>
                 </div>
 
-                {}
+                {/* Tab content */}
                 <motion.div
                     key={activeTab}
                     initial={{ opacity: 0, y: 10 }}

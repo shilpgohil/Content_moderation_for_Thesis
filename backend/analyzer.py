@@ -1,4 +1,11 @@
+"""
+Thesis Strength Analyzer - Hybrid ML + LLM Approach
 
+This module analyzes investment theses using:
+1. ML preprocessing (spaCy) for feature extraction
+2. Pattern matching for quantitative scoring
+3. LLM (OpenAI) for qualitative analysis and synthesis
+"""
 
 import os
 import re
@@ -8,6 +15,7 @@ from typing import List, Dict, Tuple, Optional
 from dotenv import load_dotenv
 from pathlib import Path
 
+# Load environment variables from .env in the same directory as this file
 env_path = Path(__file__).parent / ".env"
 load_dotenv(dotenv_path=env_path)
 
@@ -17,6 +25,7 @@ _openai_client = None
 _verbose = True  # Global verbose flag
 
 def get_spacy():
+    """Lazy load spaCy model."""
     global _spacy_nlp
     if _spacy_nlp is None:
         import spacy
@@ -34,6 +43,7 @@ def get_spacy():
     return _spacy_nlp
 
 def get_openai_client():
+    """Lazy load OpenAI client."""
     global _openai_client
     if _openai_client is None:
         from openai import OpenAI
@@ -41,6 +51,7 @@ def get_openai_client():
         if _verbose:
             print("OpenAI client initialized.")
     return _openai_client
+
 
 try:
     from .models import (
@@ -76,7 +87,12 @@ except ImportError:
     from prompts import SYSTEM_PROMPT, ANALYSIS_PROMPT_TEMPLATE
     from templates import get_embedding_vote, classify_by_embedding
 
+
 class StrengthAnalyzer:
+    """
+    Hybrid ML + LLM Thesis Strength Analyzer.
+    Designed for API use - creates fresh instance per request.
+    """
     
     def __init__(self, verbose: bool = False):
         self.verbose = verbose
@@ -99,14 +115,20 @@ class StrengthAnalyzer:
         self._log("\n" + "="*60)
         self._log("THESIS STRENGTH ANALYSIS")
         self._log("="*60)
+        
+        # Step 1: ML Preprocessing
         self._log("\n[Step 1] ML Preprocessing...")
         sentences, ml_features = self._preprocess(thesis_text)
         self._log(f"   -> Extracted {len(sentences)} sentences")
         self._log(f"   -> Found {ml_features.entity_count} entities")
+        
+        # Step 2: Sentence Classification
         self._log("\n[Step 2] ML Sentence Classification...")
         sentence_analyses, ambiguous_indices = self._classify_sentences_ml(sentences)
         self._log(f"   -> Classified {len(sentence_analyses) - len(ambiguous_indices)} sentences with high confidence")
         self._log(f"   -> {len(ambiguous_indices)} sentences need LLM validation")
+        
+        # Step 3: Quantitative Scoring
         self._log("\n[Step 3] ML Quantitative Scoring...")
         evidence_score = self._score_evidence_quality(ml_features, sentence_analyses)
         clarity_score = self._score_clarity(ml_features, thesis_text)
@@ -117,6 +139,8 @@ class StrengthAnalyzer:
         self._log(f"   -> Clarity: {clarity_score.score}/20")
         self._log(f"   -> Risk Awareness: {risk_score.score}/20")
         self._log(f"   -> Actionability: {action_score.score}/20")
+        
+        # Step 4: LLM Analysis
         self._log("\n[Step 4] LLM Deep Analysis...")
         llm_result = self._llm_analyze(thesis_text, ml_features, sentence_analyses)
         
@@ -143,17 +167,23 @@ class StrengthAnalyzer:
         fallacies = llm_result.get("fallacies_detected", [])
         if fallacies:
             self._apply_fallacies(sentence_analyses, fallacies)
+        
+        # Step 5: Additional Features
         self._log("\n[Step 5] Building Additional Analysis...")
         
+        # Build audit table (Step 4)
         audit_table = self._build_audit_table(sentence_analyses, corrections)
         self._log(f"   -> Audit table entries: {len(audit_table)}")
         
+        # Build logic chain (Step 5)
         logic_chain = self._build_logic_chain(sentence_analyses, thesis_text)
         self._log(f"   -> Logic chain nodes: {len(logic_chain)}")
         
+        # Build weakness report (Step 6)
         weakness_report = self._build_weakness_report(sentence_analyses, ml_features, thesis_text)
         self._log(f"   -> Categorized weaknesses built")
         
+        # Check consistency (Rule 6)
         consistency_issues = self._check_consistency(sentence_analyses)
         if consistency_issues:
             self._log(f"   -> Consistency issues: {len(consistency_issues)}")
@@ -161,12 +191,15 @@ class StrengthAnalyzer:
         # Detect bias (Rule 8)
         bias_analysis = self._detect_bias(sentence_analyses, thesis_text)
         self._log(f"   -> Bias analysis: {'Biased' if bias_analysis.is_biased else 'Balanced'}")
+        
+        # Step 6: Final Report
         self._log("\n[Step 6] Building Final Report...")
         
         # Count sentence types
         type_counts = self._count_sentence_types(sentence_analyses)
         supported_count = sum(1 for s in sentence_analyses if s.support_level == SupportLevel.SUPPORTED)
         
+        # Calculate overall score
         overall = (
             evidence_score.score + 
             coherence_score.score + 
@@ -288,6 +321,8 @@ class StrengthAnalyzer:
         
         for i, sentence in enumerate(sentences):
             sent_lower = sentence.lower()
+            
+            # === PATTERN-BASED SCORING (60% weight) ===
             pattern_scores = {
                 SentenceType.FACT: 0,
                 SentenceType.OPINION: 0,
@@ -345,6 +380,8 @@ class StrengthAnalyzer:
             pattern_max_type = max(pattern_scores, key=pattern_scores.get)
             pattern_max_score = pattern_scores[pattern_max_type]
             pattern_total = sum(pattern_scores.values())
+            
+            # === EMBEDDING SCORING (40% weight) ===
             # Optimization: Use embeddings only for low confidence
             use_embeddings = pattern_total < 5 or (pattern_max_score / max(pattern_total, 1)) < 0.7
             
@@ -376,12 +413,15 @@ class StrengthAnalyzer:
                 max_score = pattern_max_score
                 total_score = pattern_total
             
+            # Calculate confidence
             if total_score == 0:
                 max_type = SentenceType.CONTEXT
                 confidence = 0.5
             else:
                 confidence = max_score / max(total_score, 1)
                 confidence = min(1.0, confidence * 1.2)  # Boost confidence slightly
+            
+            # === CERTAINTY ANALYSIS ===
             certainty_level = None
             for level, words in CERTAINTY_LEVELS.items():
                 if any(word in sent_lower for word in words):
@@ -619,6 +659,7 @@ class StrengthAnalyzer:
             
         except Exception as e:
             self._log(f"   [!] LLM Error: {e}")
+            # Return fallback values
             return {
                 "logical_coherence": {"argument_flow": 6, "cause_effect_validity": 3, "absence_of_fallacies": 3, "total": 12, "notes": ["LLM analysis failed"]},
                 "classification_corrections": [],
@@ -672,7 +713,11 @@ class StrengthAnalyzer:
         for a in analyses:
             counts[a.sentence_type] = counts.get(a.sentence_type, 0) + 1
         return counts
+    
+    # ============================================
     # NEW FEATURES: Steps 4, 5, 6 and Rules 6, 8
+    # ============================================
+    
     def _build_audit_table(self, analyses: List[SentenceAnalysis], llm_corrections: List[Dict]) -> List[AuditEntry]:
         """
         Build Fact vs Assumption audit table (Step 4).
@@ -691,6 +736,9 @@ class StrengthAnalyzer:
         """
         audit_entries = []
         processed_indices = set()
+        
+        # ========== DETECTION PATTERNS ==========
+        
         # Certainty words that indicate assumptions/projections, not facts
         certainty_words = ["will", "shall", "must", "definitely", "certainly", "always", 
                           "never", "guaranteed", "undoubtedly", "inevitably", "surely",
@@ -714,6 +762,9 @@ class StrengthAnalyzer:
         
         # Numerical evidence that supports facts (but may still need source)
         has_numbers_pattern = lambda text: any(c.isdigit() for c in text) and ('%' in text or '$' in text or 'million' in text.lower() or 'billion' in text.lower())
+        
+        # ========== ANALYZE EACH SENTENCE ==========
+        
         for a in analyses:
             text_lower = a.text.lower()
             text_clean = a.text.strip()
@@ -726,11 +777,14 @@ class StrengthAnalyzer:
             if a.sentence_type == SentenceType.CONTEXT:
                 continue
             
+            # Check for various markers
             has_source = any(marker in text_lower for marker in source_markers)
             has_numbers = has_numbers_pattern(a.text)
             has_certainty = any(word in text_lower for word in certainty_words)
             has_prediction = any(phrase in text_lower for phrase in prediction_phrases)
             has_opinion = any(word in text_lower for word in opinion_words)
+            
+            # ========== PATTERN 1: FACT with missing source ==========
             # "Revenue grew 200%" - FACT - FACT - Missing source
             if a.sentence_type == SentenceType.FACT:
                 if has_numbers and not has_source:
@@ -743,6 +797,8 @@ class StrengthAnalyzer:
                     ))
                     processed_indices.add(a.index)
                     continue
+            
+            # ========== PATTERN 2: FACT that should be ASSUMPTION ==========
             # "Will dominate market" - FACT - ASSUMPTION - Stated as certainty
             if a.sentence_type == SentenceType.FACT:
                 if has_certainty and not has_source:
@@ -756,6 +812,8 @@ class StrengthAnalyzer:
                     ))
                     processed_indices.add(a.index)
                     continue
+            
+            # ========== PATTERN 3: FACT that should be PROJECTION ==========
             # Future predictions presented as established facts
             if a.sentence_type == SentenceType.FACT:
                 if has_prediction:
@@ -768,6 +826,8 @@ class StrengthAnalyzer:
                     ))
                     processed_indices.add(a.index)
                     continue
+            
+            # ========== PATTERN 4: FACT that should be OPINION ==========
             # Subjective claims without objective evidence
             if a.sentence_type == SentenceType.FACT:
                 if has_opinion and not has_source and not has_numbers:
@@ -781,6 +841,8 @@ class StrengthAnalyzer:
                     ))
                     processed_indices.add(a.index)
                     continue
+            
+            # ========== PATTERN 5: ASSUMPTION without qualifier ==========
             # Assumptions that are presented too definitively
             if a.sentence_type == SentenceType.ASSUMPTION:
                 if has_certainty:
@@ -793,6 +855,8 @@ class StrengthAnalyzer:
                     ))
                     processed_indices.add(a.index)
                     continue
+            
+            # ========== PATTERN 6: FACT needing context ==========
             # Facts that are correct but lack context
             if a.sentence_type == SentenceType.FACT:
                 if a.support_level.value == "UNSUPPORTED" and a.index not in processed_indices:
@@ -805,6 +869,8 @@ class StrengthAnalyzer:
                     ))
                     processed_indices.add(a.index)
                     continue
+        
+        # ========== ADD LLM CORRECTIONS ==========
         for corr in llm_corrections:
             idx = corr.get("sentence_index", 0)
             if idx not in processed_indices and 0 < idx <= len(analyses):
@@ -878,6 +944,7 @@ class StrengthAnalyzer:
                     confidence=a.confidence
                 ))
         
+        # Check for counter-arguments
         counter_patterns = ["however", "but", "on the other hand", "risk", "bear case", "downside"]
         for a in analyses:
             if any(p in a.text.lower() for p in counter_patterns):
@@ -896,6 +963,7 @@ class StrengthAnalyzer:
         """Simple word overlap similarity for circular reasoning detection."""
         words1 = set(text1.lower().split())
         words2 = set(text2.lower().split())
+        # Remove common stop words
         stop_words = {"the", "a", "an", "is", "are", "was", "were", "to", "of", "and", "in", "that", "it"}
         words1 = words1 - stop_words
         words2 = words2 - stop_words
@@ -930,6 +998,7 @@ class StrengthAnalyzer:
                 
                 # Rule 7: Check for numerical context (Numbers without context/comparison)
                 if a.sentence_type == SentenceType.FACT and re.search(r'\d+', a.text):
+                    # Check for context words (growth, decline, compared, margin, yoy, etc.)
                     context_words = ["growth", "decline", "increase", "decrease", "margin", "yoy", "cagr", "compared", "versus", "vs", "from", "to"]
                     has_context = any(w in a.text.lower() for w in context_words)
                     if not has_context:
@@ -943,11 +1012,13 @@ class StrengthAnalyzer:
         if not has_connections:
             weakness.missing_connections.append("No explicit causal connectors found between claims")
         
+        # Check for unstated assumptions
         for a in analyses:
             if a.sentence_type == SentenceType.PROJECTION and "if" not in a.text.lower():
                 weakness.unstated_assumptions.append(f"Sentence {a.index}: Projection without stated conditions")
         
         # CIRCULAR REASONING DETECTION
+        # Check for sentences that use conclusion keywords as premises
         circular_patterns = [
             (r"because .*(it is|they are|this is) (good|strong|solid|promising)", "Uses conclusion as premise"),
             (r"(proves|shows|demonstrates) that .*(because|since)", "Circular logic: proof references itself"),
@@ -960,6 +1031,7 @@ class StrengthAnalyzer:
                     weakness.circular_reasoning_flags.append(f"Sentence {a.index}: {issue_desc}")
                     break
         
+        # Check for repeated assertions without new evidence
         conclusions = [a for a in analyses if a.role == SentenceRole.CONCLUSION]
         foundations = [a for a in analyses if a.role == SentenceRole.FOUNDATION]
         for conclusion in conclusions:
@@ -1011,6 +1083,7 @@ class StrengthAnalyzer:
         # If same sentence has both bullish and bearish, might be a balanced view
         # But if different sentences contradict without explanation, flag it
         if bullish_indices and bearish_indices:
+            # Check if there's a contrast connector between them
             has_contrast = any("however" in a.text.lower() or "but" in a.text.lower() for a in analyses)
             if not has_contrast and len(bullish_indices) > 0 and len(bearish_indices) > 0:
                 issues.append(ConsistencyIssue(
@@ -1042,9 +1115,11 @@ class StrengthAnalyzer:
         positive_ratio = (pos_count / total) * 100
         negative_ratio = (neg_count / total) * 100
         
+        # Check for counter-arguments
         counter_patterns = ["however", "but", "on the other hand", "alternatively", "risk", "downside", "bear case"]
         counter_present = any(p in text_lower for p in counter_patterns)
         
+        # Calculate bias score (0 = balanced, 1 = extremely one-sided)
         imbalance = abs(positive_ratio - negative_ratio) / 100
         bias_score = imbalance * (0.5 if counter_present else 1.0)
         
