@@ -1,11 +1,8 @@
-"""Decision engine for final moderation verdict."""
-
 from typing import Dict, Optional
 from ..config import ModerationConfig, DEFAULT_CONFIG
 
 
 class DecisionEngine:
-    """Aggregates signals and makes final moderation decision."""
     
     DECISION_BLOCK = "BLOCK"
     DECISION_FLAG = "FLAG"
@@ -22,7 +19,6 @@ class DecisionEngine:
         fuzzy_result: Optional[dict] = None,
         semantic_result: Optional[dict] = None
     ) -> dict:
-        """Make final moderation decision based on all signals."""
         
         fuzzy_result = fuzzy_result or {"score": 0.0, "matches": []}
         semantic_result = semantic_result or {"score": 0.0, "matches": []}
@@ -36,11 +32,9 @@ class DecisionEngine:
             "explanation": ""
         }
         
-        # Check finance relevance first
         finance_score = domain_result.get("score", 0)
         is_finance = domain_result.get("is_finance", False)
         
-        # Block if score is too low OR if content analysis determined it's not finance
         if finance_score < self.config.finance_flag_threshold or (finance_score < 0.15 and not is_finance):
             result["decision"] = self.DECISION_BLOCK
             result["flags"].append("off_topic")
@@ -51,25 +45,21 @@ class DecisionEngine:
         if finance_score < self.config.finance_pass_threshold:
             result["flags"].append("low_finance_relevance")
         
-        # Calculate risk score
         risk_score = self._calculate_risk_score(
             scam_result, toxicity_result, fuzzy_result, semantic_result
         )
         result["risk_score"] = risk_score
         
-        # Collect flags and count severe signals
         flags, high_sev_count = self._collect_flags(
             scam_result, toxicity_result, fuzzy_result, semantic_result
         )
         result["flags"].extend(flags)
         
-        # Determine final decision
         self._determine_verdict(result, risk_score, high_sev_count)
         
         return result
 
     def _calculate_risk_score(self, scam: dict, toxic: dict, fuzzy: dict, semantic: dict) -> float:
-        """Calculate weighted risk score."""
         rule_score = (
             scam.get("score", 0) * self.config.scam_weight +
             toxic.get("score", 0) * self.config.toxicity_weight
@@ -80,26 +70,21 @@ class DecisionEngine:
         return round(max(rule_score, fuzzy_w, semantic_w), 3)
 
     def _collect_flags(self, scam: dict, toxic: dict, fuzzy: dict, semantic: dict) -> tuple:
-        """Collect all flags and count high severity ones."""
         flags = []
         high_severity_count = 0
         
-        # 1. Scam flags
         s_flags, s_cnt = self._get_scam_flags(scam)
         flags.extend(s_flags)
         high_severity_count += s_cnt
         
-        # 2. Fuzzy flags
         f_flags, f_cnt = self._get_fuzzy_flags(fuzzy)
         flags.extend(f_flags)
         high_severity_count += f_cnt
         
-        # 3. Semantic flags
         sem_flags, sem_cnt = self._get_semantic_flags(semantic)
         flags.extend(sem_flags)
         high_severity_count += sem_cnt
         
-        # 4. Toxic flags
         t_flags, t_cnt = self._get_toxic_flags(toxic)
         flags.extend(t_flags)
         high_severity_count += t_cnt
@@ -138,21 +123,16 @@ class DecisionEngine:
         flags = []
         count = 0
         if result.get("is_toxic"):
-            # Get both categories and matched terms
             categories = result.get("categories", [])
             matched_terms = result.get("matched", [])
             
-            # Create a flag for EACH matched term (not just category)
             for i, term in enumerate(matched_terms):
-                # Try to pair with a category if available
                 category = categories[i] if i < len(categories) else categories[0] if categories else "toxicity"
                 flags.append(f"toxic:{category}:{term}")
                 
-                # Count high severity
                 if category in ["hate_speech", "personal_attack", "severe_profanity", "threat", "harassment", "doxxing", "defamation"]:
                     count += 1
             
-            # If no matched terms but has categories, add category-only flags
             if not matched_terms and categories:
                 for category in categories:
                     flags.append(f"toxic:{category}")
@@ -161,7 +141,6 @@ class DecisionEngine:
         return flags, count
 
     def _determine_verdict(self, result: dict, score: float, severity_count: int):
-        """Set decision and explanation based on score and severity."""
         if score >= self.config.block_threshold or severity_count >= self.config.min_block_signals:
             result["decision"] = self.DECISION_BLOCK
             result["explanation"] = self._build_explanation(result["flags"], "blocked")
@@ -177,7 +156,6 @@ class DecisionEngine:
         return result
     
     def _build_explanation(self, flags: list, action: str) -> str:
-        """Build human-readable explanation."""
         if not flags:
             return f"Content {action} based on risk score"
         

@@ -1,26 +1,18 @@
-"""Fuzzy matching for detecting misspelled scam phrases."""
-
 from typing import Dict, List
 from rapidfuzz import fuzz, process
 
 
 class FuzzyMatcher:
-    """Detects misspelled scam phrases using fuzzy string matching."""
     
-    # Minimum similarity score to consider a match (0-100)
     DEFAULT_THRESHOLD = 75
     
     def __init__(self, threshold: float = None):
-        """Initialize with configurable similarity threshold."""
-        # Use 75% as default to catch clear misspellings
         self.threshold = threshold if threshold is not None else self.DEFAULT_THRESHOLD
         self._scam_phrases = self._load_scam_phrases()
         self._load_whitelist()
     
     def _load_scam_phrases(self) -> List[str]:
-        """Load scam phrases - only multi-word distinctive phrases."""
         return [
-            # High severity - distinctive multi-word phrases
             "guaranteed returns",
             "guaranteed profit", 
             "guaranteed monthly returns",
@@ -53,7 +45,6 @@ class FuzzyMatcher:
             "send to my account",
             "pay registration fee",
             "pay joining fee",
-            # Additional phrases for fuzzy matching
             "double yor moni",
             "doubel your money",
             "garanteed returns",
@@ -68,16 +59,13 @@ class FuzzyMatcher:
             "earn lakhs",
             "make lakhs",
             "crores monthly",
-            # More obfuscated patterns
             "laaast chaance",
             "opshuns traading groop",
             "registrashun closing",
         ]
-    # Whitelist contexts are now loaded from scam_patterns.json
     WHITELIST_CONTEXTS = []
 
     def _load_whitelist(self):
-        """Load whitelist contexts from shared JSON configuration."""
         import json
         from pathlib import Path
         try:
@@ -86,27 +74,21 @@ class FuzzyMatcher:
                 data = json.load(f)
                 self.WHITELIST_CONTEXTS = data.get("whitelist_contexts", [])
         except Exception as e:
-            # Fallback to empty if load fails, or log error
             print(f"Error loading whitelist: {e}")
             self.WHITELIST_CONTEXTS = []
     
     def _match_context(self, context: str, text: str) -> bool:
-        """Match context using word boundaries for single words, substring for phrases."""
         import re
         context_lower = context.lower()
         text_lower = text.lower()
         if ' ' in context_lower:
-            # Multi-word phrase: substring match is acceptable
             return context_lower in text_lower
         else:
-            # Single word: use word boundary regex to prevent partial matches
             return bool(re.search(r'\b' + re.escape(context_lower) + r'\b', text, re.IGNORECASE))
     
     def check(self, text: str) -> Dict:
-        """Check text for fuzzy matches against known scam phrases."""
         text_lower = text.lower()
         
-        # Skip if whitelist context is present (educational/warning content)
         for context in self.WHITELIST_CONTEXTS:
             if self._match_context(context, text):
                 return {
@@ -119,19 +101,15 @@ class FuzzyMatcher:
         matches = []
         max_score = 0.0
         
-        # Generate n-grams matching typical scam phrase lengths (2-4 words)
         words = text_lower.split()
         ngrams = self._generate_ngrams(words, min_n=2, max_n=4)
         
-        seen_matches = set()  # Avoid duplicates
+        seen_matches = set()
         
         for ngram in ngrams:
-            # Skip very short n-grams
             if len(ngram) < 10:
                 continue
                 
-            # Find best match in scam phrases using simple ratio
-            # token_sort_ratio was causing issues with similar phrases of different lengths
             result = process.extractOne(
                 ngram,
                 self._scam_phrases,
@@ -141,12 +119,10 @@ class FuzzyMatcher:
             if result and result[1] >= self.threshold:
                 matched_phrase, score, _ = result
                 
-                # Additional validation: lengths should be similar
                 len_ratio = len(ngram) / len(matched_phrase)
                 if len_ratio < 0.7 or len_ratio > 1.5:
                     continue
                 
-                # Avoid duplicates
                 if matched_phrase in seen_matches:
                     continue
                 seen_matches.add(matched_phrase)
@@ -168,7 +144,6 @@ class FuzzyMatcher:
         
         high_severity_count = sum(1 for m in matches if m["severity"] == "high")
         
-        # Score based on best match only (no amplification)
         final_score = max_score
         
         return {
@@ -179,7 +154,6 @@ class FuzzyMatcher:
         }
     
     def _generate_ngrams(self, words: List[str], min_n: int = 2, max_n: int = 5) -> List[str]:
-        """Generate n-grams from word list."""
         ngrams = []
         for n in range(min_n, min(max_n + 1, len(words) + 1)):
             for i in range(len(words) - n + 1):
@@ -187,7 +161,6 @@ class FuzzyMatcher:
         return ngrams
     
     def _get_severity(self, phrase: str) -> str:
-        """Determine severity of matched phrase."""
         high_severity_phrases = {
             "guaranteed returns", "guaranteed profit", "guaranteed monthly",
             "double your money", "triple your money", "risk free profit",

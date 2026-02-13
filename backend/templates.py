@@ -1,22 +1,16 @@
-"""
-Template Embedding Bank for sentence classification.
-Uses gold-standard example sentences for each type to improve ML classification accuracy.
-Uses shared SentenceTransformer from model_manager for RAM efficiency.
-"""
+
 
 import numpy as np
 from typing import Dict, List, Tuple, Optional
 
-# Import shared sentence transformer singleton
+
 from shared.model_manager import get_sentence_transformer
 
-# Cache for template embeddings
+
 _template_embeddings = None
 
 
-# ============================================
-# GOLD-STANDARD SENTENCE TEMPLATES
-# ============================================
+
 
 FACT_TEMPLATES = [
     "Revenue increased 23% in Q3 2024.",
@@ -87,10 +81,6 @@ CONTEXT_TEMPLATES = [
 
 
 def get_template_embeddings() -> Dict[str, np.ndarray]:
-    """
-    Compute and cache embeddings for all template sentences.
-    Returns dict mapping sentence type to stacked embedding matrix.
-    """
     global _template_embeddings
     
     if _template_embeddings is not None:
@@ -106,56 +96,45 @@ def get_template_embeddings() -> Dict[str, np.ndarray]:
         "CONTEXT": model.encode(CONTEXT_TEMPLATES, convert_to_numpy=True),
     }
     
-    # Check verbose flag from analyzer module
+
     try:
         import analyzer
         if getattr(analyzer, '_verbose', True):
             print(f"Template embeddings computed: {sum(len(v) for v in _template_embeddings.values())} templates.")
     except (ImportError, AttributeError):
-        pass  # Silent in API mode
+        pass
     return _template_embeddings
 
 
 def classify_by_embedding(sentence: str) -> Tuple[str, float]:
-    """
-    Classify a sentence by comparing its embedding to template embeddings.
-    Returns (predicted_type, confidence_score).
-    
-    confidence = max_similarity - second_max_similarity (margin-based)
-    """
     model = get_sentence_transformer()
     templates = get_template_embeddings()
     
-    # Get sentence embedding
+
     sent_embedding = model.encode([sentence], convert_to_numpy=True)[0]
     
-    # Calculate max cosine similarity with each type's templates
+
     type_scores = {}
     for sent_type, template_embeds in templates.items():
-        # Cosine similarity = dot product for normalized vectors
+
         similarities = np.dot(template_embeds, sent_embedding) / (
             np.linalg.norm(template_embeds, axis=1) * np.linalg.norm(sent_embedding)
         )
         type_scores[sent_type] = float(np.max(similarities))
     
-    # Get top two types
+
     sorted_types = sorted(type_scores.items(), key=lambda x: x[1], reverse=True)
     best_type, best_score = sorted_types[0]
     second_score = sorted_types[1][1] if len(sorted_types) > 1 else 0
     
-    # Confidence based on margin between top two
+
     margin = best_score - second_score
-    # Normalize confidence: margin of 0.1+ = high confidence
-    confidence = min(1.0, margin * 5 + 0.5)  # Scale margin to 0.5-1.0 range
+    confidence = min(1.0, margin * 5 + 0.5)
     
     return best_type, confidence
 
 
 def get_embedding_vote(sentence: str) -> Dict[str, float]:
-    """
-    Get similarity scores for all types (for voting system).
-    Returns dict mapping type to similarity score.
-    """
     model = get_sentence_transformer()
     templates = get_template_embeddings()
     

@@ -1,5 +1,3 @@
-"""Toxicity and inappropriate content detection."""
-
 import json
 import re
 from pathlib import Path
@@ -7,7 +5,6 @@ from typing import List, Set
 
 
 class ToxicityChecker:
-    """Detects profanity, hate speech, personal attacks, and defamation."""
     
     def __init__(self):
         self._severe_profanity: Set[str] = set()
@@ -24,17 +21,14 @@ class ToxicityChecker:
         self._load_whitelist()
     
     def _load_patterns(self):
-        """Load toxicity patterns from JSON file."""
         data_path = Path(__file__).parent.parent / "data" / "toxic_terms.json"
         
         with open(data_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
         
-        # Load severe profanity (BLOCK-worthy)
         for term in data.get("severe_profanity", []):
             self._severe_profanity.add(term.lower())
         
-        # Load mild profanity (FLAG-worthy)
         for term in data.get("mild_profanity", []):
             self._mild_profanity.add(term.lower())
         
@@ -56,7 +50,6 @@ class ToxicityChecker:
         for term in data.get("doxxing_patterns", []):
             self._doxxing_patterns.add(term.lower())
         
-        # Load defamation patterns
         for term in data.get("defamation_patterns", []):
             self._defamation_patterns.add(term.lower())
         
@@ -66,22 +59,14 @@ class ToxicityChecker:
             except re.error:
                 pass
     
-
-    
     def _check_defamation(self, text_lower: str, result: dict, linguistic_result: dict = None):
-        """
-        Check for defamation patterns directed at known entities.
-        Uses linguistic analysis for smarter detection (negation, precise entity match).
-        """
         linguistic_result = linguistic_result or {}
         
-        # 1. Identify Target Entities
         mentioned_entities = self._find_target_entities(linguistic_result)
         
         if not mentioned_entities:
             return
         
-        # 2. Check for Attack Patterns (with Negation)
         self._detect_defamation_patterns(
             text_lower, 
             mentioned_entities, 
@@ -90,10 +75,8 @@ class ToxicityChecker:
         )
 
     def _find_target_entities(self, linguistic_result: dict) -> List[str]:
-        """Identify mentioned public figures/brands."""
         mentioned_entities = []
         
-        # Use SpaCy entities (PERSON, ORG, GPE)
         if linguistic_result.get("is_available"):
             for entity_text, label in linguistic_result.get("entities", []):
                 if label in ("PERSON", "ORG", "GPE"):
@@ -102,8 +85,7 @@ class ToxicityChecker:
         return mentioned_entities
 
     def _detect_defamation_patterns(self, text_lower: str, entities: List[str], 
-                                  result: dict, linguistic_result: dict):
-        """Detect attack patterns while handling negation."""
+                                   result: dict, linguistic_result: dict):
         doc = linguistic_result.get("doc")
         negation_map = linguistic_result.get("negation_map", {})
         
@@ -117,20 +99,16 @@ class ToxicityChecker:
                 result["categories"].append("defamation")
                 result["matched"].append(f"{entities[0]} + '{pattern}'")
                 result["score"] += 0.7
-                return  # One match is enough
+                return
     
     def _is_pattern_negated(self, pattern: str, text_lower: str, 
                           doc, negation_map: dict) -> bool:
-        """Check if a pattern is negated using SpaCy or rules."""
-        # 1. SpaCy Token-based Negation
         if self._check_spacy_negation(pattern, doc, negation_map):
             return True
         
-        # 2. String-based Heuristic Fallback
         return self._check_string_negation(pattern, text_lower)
 
     def _check_spacy_negation(self, pattern: str, doc, negation_map: dict) -> bool:
-        """Check specific tokens for negation mapping."""
         if doc and negation_map:
             pattern_words = set(pattern.split())
             for token in doc:
@@ -140,7 +118,6 @@ class ToxicityChecker:
         return False
 
     def _check_string_negation(self, pattern: str, text_lower: str) -> bool:
-        """Check for negation words or phrases near pattern."""
         if f"not {pattern}" in text_lower or \
            f"no {pattern}" in text_lower or \
            f"never {pattern}" in text_lower:
@@ -152,45 +129,35 @@ class ToxicityChecker:
                 
         return False
 
-    
     def _check_pattern_set(self, text_lower: str, patterns: Set[str], 
                            category: str, score: float, result: dict):
-        """Helper to check a set of patterns and update result."""
         import re
         matched_any = False
         for term in patterns:
-            # For single words (no spaces), use word boundary matching
             if ' ' not in term and len(term) <= 8:
                 if self._match_single_word(term, text_lower):
                     self._add_match(result, category, term, score if not matched_any else 0)
                     matched_any = True
-                    # Continue to find all matches, don't break
             else:
-                # For multi-word phrases, substring match is fine
                 if self._match_phrase(term, text_lower):
                     self._add_match(result, category, term, score if not matched_any else 0)
                     matched_any = True
-                    # Continue to find all matches, don't break
     
     def _match_single_word(self, term: str, text: str) -> bool:
-        """Check for single word with word boundaries."""
         import re
         pattern = r'\b' + re.escape(term) + r'\b'
         return bool(re.search(pattern, text))
 
     def _match_phrase(self, term: str, text: str) -> bool:
-        """Check for multi-word phrase."""
         return term in text
 
     def _add_match(self, result: dict, category: str, term: str, score: float):
-        """Update result with match."""
         if category not in result["categories"]:
             result["categories"].append(category)
         result["matched"].append(term)
         result["score"] += score
     
     def _load_whitelist(self):
-        """Load whitelist contexts from shared JSON configuration."""
         data_path = Path(__file__).parent.parent / "data" / "scam_patterns.json"
         
         try:
@@ -198,17 +165,11 @@ class ToxicityChecker:
                 data = json.load(f)
                 self.WHITELIST_CONTEXTS = data.get("whitelist_contexts", [])
         except Exception:
-            # Fallback to empty
             self.WHITELIST_CONTEXTS = []
 
-    # Whitelist contexts (loaded dynamically)
     WHITELIST_CONTEXTS = []
     
     def check(self, text: str, linguistic_result: dict = None) -> dict:
-        """
-        Check text for toxic content.
-        Returns score and matched patterns.
-        """
         text_lower = text.lower()
         linguistic_result = linguistic_result or {}
         
@@ -219,8 +180,6 @@ class ToxicityChecker:
             "matched": []
         }
         
-        # Check if whitelist context is present (news/educational content)
-        # NOTE: This only affects scam-related checks, NOT profanity/hate speech
         is_whitelisted = False
         for context in self.WHITELIST_CONTEXTS:
             if context in text_lower:
@@ -228,8 +187,6 @@ class ToxicityChecker:
                 is_whitelisted = True
                 break
         
-        # Check standard toxicity categories
-        # Config format: (pattern_set, category_name, toxicity_score)
         checks = [
             (self._severe_profanity, "severe_profanity", 0.6),
             (self._mild_profanity, "mild_profanity", 0.3),  
@@ -243,10 +200,8 @@ class ToxicityChecker:
         for patterns, category, score in checks:
             self._check_pattern_set(text_lower, patterns, category, score, result)
         
-        # Check defamation (entity + attack pattern)
         self._check_defamation(text_lower, result, linguistic_result)
         
-        # Check hate speech patterns (regex)
         for pattern in self._hate_patterns:
             if pattern.search(text):
                 if "hate_speech" not in result["categories"]:
@@ -254,13 +209,11 @@ class ToxicityChecker:
                 result["score"] += 0.6
                 break
         
-        # Check spam indicators
         spam_count = sum(1 for ind in self._spam_indicators if ind in text_lower)
         if spam_count >= 2:
             result["categories"].append("spam")
             result["score"] += 0.3
         
-        # Normalize and finalize
         result["score"] = min(1.0, round(result["score"], 3))
         result["is_toxic"] = result["score"] >= 0.3
         

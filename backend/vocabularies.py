@@ -1,8 +1,6 @@
-"""
-Investment-specific vocabulary banks for feature extraction.
-"""
 
-# Evidence markers - indicates supported claims
+
+
 EVIDENCE_MARKERS = {
     "strong": [
         "according to", "reported", "data shows", "SEC filing", 
@@ -18,7 +16,7 @@ EVIDENCE_MARKERS = {
     ]
 }
 
-# Source attribution patterns
+
 SOURCE_PATTERNS = [
     r"according to\s+\w+",
     r"as per\s+\w+",
@@ -28,7 +26,7 @@ SOURCE_PATTERNS = [
     r"FY\d{2,4}",  # Fiscal year
 ]
 
-# Vague/weak language
+
 VAGUE_WORDS = [
     "some", "many", "most", "often", "usually", "significant",
     "substantial", "considerable", "various", "numerous"
@@ -44,7 +42,7 @@ CERTAINTY_WORDS = [
     "guaranteed", "undoubtedly", "without doubt"
 ]
 
-# Risk-related vocabulary
+
 RISK_VOCABULARY = {
     "risk_terms": [
         "risk", "downside", "bear case", "if fails", "could break",
@@ -60,7 +58,7 @@ RISK_VOCABULARY = {
     ]
 }
 
-# Actionability signals
+
 ACTIONABILITY_SIGNALS = {
     "strong": [
         "buy", "sell", "enter", "exit", "allocate", "position",
@@ -80,7 +78,7 @@ ACTIONABILITY_SIGNALS = {
     ]
 }
 
-# Sentence type indicators
+
 FACT_INDICATORS = [
     "reported", "announced", "disclosed", "confirmed", "released",
     "grew", "increased", "decreased", "fell", "rose", "expanded"
@@ -101,7 +99,7 @@ PROJECTION_INDICATORS = [
     "likely to", "set to", "poised to", "on track to"
 ]
 
-# Financial metrics patterns
+
 FINANCIAL_PATTERNS = [
     r"\$[\d,]+\.?\d*[BMK]?",  # Dollar amounts
     r"₹[\d,]+\.?\d*[LCK]?",  # Rupee amounts
@@ -111,7 +109,7 @@ FINANCIAL_PATTERNS = [
     r"\d{4}[-–]\d{2,4}",  # Year ranges
 ]
 
-# Company/Entity extraction helpers
+
 SECTOR_KEYWORDS = [
     "IT services", "auto", "banking", "FMCG", "pharma", "infra",
     "defense", "capital goods", "chemicals", "energy", "telecom"
@@ -125,11 +123,9 @@ THESIS_STRUCTURE_MARKERS = {
     "action_section": ["how", "action", "strategy", "execution"]
 }
 
-# ============================================
-# EXPANDED DOMAIN VOCABULARY (ML Improvement #2)
-# ============================================
 
-# Financial statement references - indicates factual grounding
+
+
 FINANCIAL_STATEMENT_REFS = [
     "10-K", "10-Q", "annual report", "quarterly report", "SEC filing",
     "balance sheet", "income statement", "cash flow statement",
@@ -137,7 +133,7 @@ FINANCIAL_STATEMENT_REFS = [
     "financial statements", "audited report", "proxy statement"
 ]
 
-# Credible source references - boosts evidence quality
+
 CREDIBLE_SOURCES = [
     "Bloomberg", "Reuters", "Wall Street Journal", "Financial Times",
     "SEC", "SEBI", "management guidance", "analyst estimates", "consensus",
@@ -145,7 +141,7 @@ CREDIBLE_SOURCES = [
     "quarterly earnings", "annual general meeting", "investor day"
 ]
 
-# Time-bound patterns (regex) - indicates specific, verifiable claims
+
 TIME_BOUND_PATTERNS = [
     r"in Q[1-4]\s*\d{4}",           # Q3 2024
     r"FY\d{2,4}",                    # FY24, FY2024
@@ -157,7 +153,7 @@ TIME_BOUND_PATTERNS = [
     r"(since|from) \d{4}",           # since 2020
 ]
 
-# Causal connectors - indicates logical structure
+
 CAUSAL_CONNECTORS = {
     "strong_causal": ["because", "therefore", "thus", "hence", "as a result", 
                       "consequently", "due to", "caused by", "leading to"],
@@ -166,11 +162,9 @@ CAUSAL_CONNECTORS = {
     "additive": ["moreover", "furthermore", "additionally", "also", "in addition"]
 }
 
-# ============================================
-# CERTAINTY ANALYSIS (ML Improvement #3)
-# ============================================
 
-# Categorized certainty levels - replaces simple CERTAINTY_WORDS
+
+
 CERTAINTY_LEVELS = {
     "high": [
         "definitely", "certainly", "always", "never", "absolutely",
@@ -190,13 +184,13 @@ CERTAINTY_LEVELS = {
     ]
 }
 
-# Certainty-evidence combinations (for issue detection)
+
 OVERCONFIDENCE_INDICATORS = [
     "will definitely", "guaranteed to", "certainly will", "must happen",
     "no doubt", "100%", "impossible to fail", "cannot lose"
 ]
 
-# Appropriate hedging for projections
+
 APPROPRIATE_HEDGE_WORDS = [
     "likely", "expected", "projected", "anticipated", "may",
     "could", "potential", "possible", "estimated"

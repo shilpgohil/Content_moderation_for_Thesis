@@ -1,5 +1,3 @@
-"""Linguistic analysis using SpaCy for deep text understanding."""
-
 import re
 import logging
 from typing import Dict, List, Optional, Tuple, Set
@@ -7,7 +5,6 @@ from typing import Dict, List, Optional, Tuple, Set
 try:
     import spacy
     from spacy.tokens import Doc, Span
-    # Define custom attributes if needed (extensions)
     if not Doc.has_extension("negated_terms"):
         Doc.set_extension("negated_terms", default=[])
 except ImportError:
@@ -17,7 +14,6 @@ logger = logging.getLogger(__name__)
 
 
 class LinguisticAnalyzer:
-    """Provides deep linguistic analysis including NER, negation, and dependencies."""
     
     def __init__(self, model_name: str = "en_core_web_sm"):
         self.model_name = model_name
@@ -29,11 +25,9 @@ class LinguisticAnalyzer:
             self._disabled = True
 
     def _load_model(self):
-        """Lazy load the SpaCy model from shared manager."""
         if self._nlp is None and not self._disabled:
             try:
                 logger.info(f"Loading SpaCy model: {self.model_name}")
-                # Use shared model manager for singleton spaCy instance
                 from shared.model_manager import get_spacy
                 self._nlp = get_spacy()
                 logger.info("SpaCy model loaded successfully.")
@@ -42,17 +36,6 @@ class LinguisticAnalyzer:
                 self._disabled = True
 
     def analyze(self, text: str) -> Dict:
-        """
-        Perform comprehensive linguistic analysis.
-        
-        Returns a dictionary containing:
-        - entities: List of (text, label) tuples
-        - sentences: List of sentence strings
-        - tokens: List of token strings
-        - negation_map: Dictionary mapping token indices to their negating words
-        - pos_tags: List of (token, pos) tuples
-        - dependencies: List of (subject, verb, object) triples (simplified)
-        """
         if self._disabled:
             return self._get_empty_result()
         
@@ -68,12 +51,11 @@ class LinguisticAnalyzer:
             tokens = [token.text for token in doc]
             pos_tags = [(token.text, token.pos_) for token in doc]
             
-            # Negation and Dependency Analysis
             negation_map = self._detect_negation(doc)
             dependencies = self._extract_dependencies(doc)
             
             return {
-                "doc": doc, # Keep the doc for advanced users
+                "doc": doc,
                 "entities": entities,
                 "sentences": sentences,
                 "tokens": tokens,
@@ -87,18 +69,12 @@ class LinguisticAnalyzer:
             return self._get_empty_result()
 
     def _detect_negation(self, doc) -> Dict[int, str]:
-        """
-        Map token indices to the negation word affecting them.
-        Example: "not a fraud" -> {index_of_fraud: "not"}
-        """
         negation_map = {}
         for token in doc:
             if token.dep_ == "neg":
                 head_idx = token.head.i
                 negation_map[head_idx] = token.text
                 
-                # Propagate negation to children of the head (adjectives, objects)
-                # e.g. "is not a bad person" -> not -> bad
                 for child in token.head.children:
                     if child.dep_ in ("attr", "dobj", "acomp", "amod") and child.i != token.i:
                         negation_map[child.i] = token.text
@@ -106,7 +82,6 @@ class LinguisticAnalyzer:
         return negation_map
 
     def _extract_dependencies(self, doc) -> List[Dict]:
-        """Extract simplified Subject-Verb-Object triples."""
         triples = []
         for token in doc:
             if token.pos_ == "VERB":
@@ -120,12 +95,11 @@ class LinguisticAnalyzer:
                         "subject": subject_text,
                         "verb": token.text,
                         "object": object_text,
-                        "negated": token.i in self._detect_negation(doc) # Simple check
+                        "negated": token.i in self._detect_negation(doc)
                     })
         return triples
 
     def _get_empty_result(self) -> Dict:
-        """Return a safe empty result structure."""
         return {
             "doc": None,
             "entities": [],

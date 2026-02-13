@@ -1,6 +1,3 @@
-"""
-LLM prompt templates for thesis strength analysis.
-"""
 
 SYSTEM_PROMPT = """You are a professional investment thesis analyzer. Your job is to forensically examine investment theses and provide detailed scoring and analysis.
 
